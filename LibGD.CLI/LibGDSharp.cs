@@ -6,6 +6,7 @@ using CppSharp;
 using CppSharp.AST;
 using CppSharp.AST.Extensions;
 using CppSharp.Generators;
+using CppAbi = CppSharp.Parser.AST.CppAbi;
 
 namespace LibGD.CLI
 {
@@ -64,21 +65,18 @@ namespace LibGD.CLI
 
         public void Setup(Driver driver)
         {
+            driver.Options.addDefines("_WIN32");
             driver.Options.GeneratorKind = GeneratorKind.CSharp;
-            driver.Options.Is32Bit = true;
-            driver.Options.NoBuiltinIncludes = true;
-            driver.Options.MicrosoftMode = false;
-            driver.Options.TargetTriple = "i686-w64-mingw32";
-            driver.Options.Abi = CppAbi.Itanium;
+            driver.Options.TargetTriple = "i686-pc-win32";
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
             driver.Options.Verbose = true;
             driver.Options.IgnoreParseWarnings = true;
+            driver.Options.CompileCode = true;
             driver.Options.CheckSymbols = true;
             driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h"));
-            driver.Options.SystemIncludeDirs.Add(this.systemIncludeDir);
-            driver.Options.IncludeDirs.Add(includeDir);
-            driver.Options.LibraryDirs.Add(Path.GetDirectoryName(this.libraryFile));
+            driver.Options.addIncludeDirs(includeDir);
+            driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
