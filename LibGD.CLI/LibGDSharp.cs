@@ -1,9 +1,7 @@
 ﻿using System.IO;
-using System.Linq;
 using System.Reflection;
 using CppSharp;
 using CppSharp.AST;
-using CppSharp.AST.Extensions;
 using CppSharp.Generators;
 
 namespace LibGD.CLI
@@ -21,38 +19,6 @@ namespace LibGD.CLI
 
         public void Preprocess(Driver driver, ASTContext ctx)
         {
-            var gd = driver.ASTContext.TranslationUnits.FirstOrDefault(t => t.FileName == "gd.h");
-            if (gd != null)
-            {
-                foreach (var field in gd.FindClass("gdSink").Fields)
-                {
-                    FunctionType functionType;
-                    if (field.Type.IsPointerTo(out functionType))
-                    {
-                        field.ExplicityIgnored = true;
-                    }
-                }
-                foreach (var field in gd.FindClass("gdSource").Fields)
-                {
-                    FunctionType functionType;
-                    if (field.Type.IsPointerTo(out functionType))
-                    {
-                        field.ExplicityIgnored = true;
-                    }
-                }
-            }
-            var gdIO = driver.ASTContext.TranslationUnits.FirstOrDefault(t => t.FileName == "gd_io.h");
-            if (gdIO != null)
-            {
-                foreach (var field in gdIO.FindClass("gdIOCtx").Fields)
-                {
-                    FunctionType functionType;
-                    if (field.Type.IsPointerTo(out functionType))
-                    {
-                        field.ExplicityIgnored = true;
-                    }
-                }
-            }
         }
 
         public void Postprocess(Driver driver, ASTContext lib)
