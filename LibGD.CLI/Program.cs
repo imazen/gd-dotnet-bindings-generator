@@ -23,7 +23,10 @@ namespace LibGD.CLI
                 Console.WriteLine("{0} does not exist.", args[0]);
                 return;
             }
-            ConsoleDriver.Run(new LibGDSharp(args[0], args[1]));
+            using (new ConsoleCopy("gd-cppsharp-log.txt"))
+            {
+                ConsoleDriver.Run(new LibGDSharp(args[0], args[1]));
+            }
         }
     }
 }
