@@ -19,7 +19,7 @@ public class GlobalMembersGd_num_colors
 		{
             Assert.Fail();
 		}
-		im = gd.gdImageCreateFromGd(new _iobuf(fp));
+		im = gd.gdImageCreateFromGd(fp);
 		C.fclose(fp);
 		if (im != null)
 		{

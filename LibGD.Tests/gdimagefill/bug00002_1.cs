@@ -34,7 +34,7 @@ public class GlobalMembersBug00002_1
             Assert.Fail();
 		}
 
-		gd.gdImagePng(im,new _iobuf(fp));
+		gd.gdImagePng(im, fp);
 		C.fclose(fp);
 
 		path = string.Format("{0}/gdimagefill/bug00002_1_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);

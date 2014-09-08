@@ -21,7 +21,7 @@ public class GlobalMembersBug00066
             Assert.Fail("cannot open <{0}>\n", path);
 		}
 
-		im = gd.gdImageCreateFromGif(new _iobuf(fp));
+		im = gd.gdImageCreateFromGif(fp);
 		C.fclose(fp);
 
 		path = string.Format("{0}/gif/bug00066_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);

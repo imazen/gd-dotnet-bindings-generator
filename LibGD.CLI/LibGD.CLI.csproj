@@ -71,6 +71,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConsoleCopy.cs" />
+    <Compile Include="FILE.cs" />
     <Compile Include="LibGDSharp.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -22,7 +22,7 @@ public class GlobalMembersGd2_read
 			Assert.Fail("failed, cannot open file\n");
 		}
 
-		im = gd.gdImageCreateFromGd2(new _iobuf(fp));
+		im = gd.gdImageCreateFromGd2(fp);
 		C.fclose(fp);
 
 		path = string.Format("{0}/gd2/conv_test_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);

@@ -76,7 +76,7 @@ public class GlobalMembersBmp_im2im
             fp = C.fopen(string.Format("bmp_im2im_{0}.bmp", name), "wb");
             if (fp != IntPtr.Zero)
             {
-                gd.gdImageBmp(input, new _iobuf(fp), 1);
+                gd.gdImageBmp(input, fp, 1);
                 C.fclose(fp);
             }
         } while (false);

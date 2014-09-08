@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -7,13 +8,13 @@ public class GlobalMembersBmp_null
     [Test]
 	public void TestBmpNull()
 	{
-        gdImageStruct im = gd.gdImageCreateFromBmp(null);
+        gdImageStruct im = gd.gdImageCreateFromBmp(IntPtr.Zero);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);
             Assert.Fail("gdImageCreateFromBmp returns non-null when passed null.");
 		}
-		gd.gdImageBmp(im, null, 0); // noop safely
+        gd.gdImageBmp(im, IntPtr.Zero, 0); // noop safely
 	}
 }
 

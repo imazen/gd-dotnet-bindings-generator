@@ -3,6 +3,7 @@ using System.Reflection;
 using CppSharp;
 using CppSharp.AST;
 using CppSharp.Generators;
+using CppSharp.Parser;
 
 namespace LibGD.CLI
 {
@@ -28,8 +29,9 @@ namespace LibGD.CLI
         public void Setup(Driver driver)
         {
             driver.Options.addDefines("_WIN32");
+            driver.Options.LanguageVersion = LanguageVersion.C;
             driver.Options.GeneratorKind = GeneratorKind.CSharp;
-            driver.Options.TargetTriple = "i686-pc-win32";
+            driver.Options.TargetTriple = "i686-pc-win64";
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
             driver.Options.Verbose = true;

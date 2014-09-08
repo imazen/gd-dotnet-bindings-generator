@@ -28,7 +28,7 @@ public class GlobalMembersBug00067
 			Assert.Fail();
 		}
 
-		im = gd.gdImageCreateFromJpeg(new _iobuf(fp));
+		im = gd.gdImageCreateFromJpeg(fp);
 
 		C.fclose(fp);
 

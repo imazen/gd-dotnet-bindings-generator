@@ -21,7 +21,7 @@ public class GlobalMembersJpeg_empty_file
             Assert.Fail("failed, cannot open file\n");
 		}
 
-		im = gd.gdImageCreateFromJpeg(new _iobuf(fp));
+		im = gd.gdImageCreateFromJpeg(fp);
 		C.fclose(fp);
 
         if (im != null)

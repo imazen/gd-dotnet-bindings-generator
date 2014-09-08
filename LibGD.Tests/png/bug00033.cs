@@ -21,7 +21,7 @@ public class GlobalMembersBug00033
             Assert.Fail("failed, cannot open file <{0}>\n", path);
 		}
 
-		im = gd.gdImageCreateFromPng(new _iobuf(fp));
+		im = gd.gdImageCreateFromPng(fp);
 		C.fclose(fp);
 
 		if (im != null)

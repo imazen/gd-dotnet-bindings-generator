@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -9,13 +10,13 @@ public class GlobalMembersGif_null
 	{
 		gdImageStruct im;
 
-		im = gd.gdImageCreateFromGif(null);
+        im = gd.gdImageCreateFromGif(IntPtr.Zero);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);
 			Assert.Fail();
 		}
-		gd.gdImageGif(im, null); // noop safely
+        gd.gdImageGif(im, IntPtr.Zero); // noop safely
 	}
 }
 

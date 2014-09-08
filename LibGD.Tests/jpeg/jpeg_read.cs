@@ -20,7 +20,7 @@ public class GlobalMembersJpeg_read
             Assert.Fail();
 		}
 
-		im = gd.gdImageCreateFromJpeg(new _iobuf(fp));
+		im = gd.gdImageCreateFromJpeg(fp);
 		C.fclose(fp);
 
 		if (im == null)

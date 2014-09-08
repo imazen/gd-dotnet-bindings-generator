@@ -29,7 +29,7 @@ public class GlobalMembersBug00005
 				Assert.Fail();
 			}
 
-			im = gd.gdImageCreateFromGif(new _iobuf(fp));
+			im = gd.gdImageCreateFromGif(fp);
 			C.fclose(fp);
 
 			if (valid[i] != 0)

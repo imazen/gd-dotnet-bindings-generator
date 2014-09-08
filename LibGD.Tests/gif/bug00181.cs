@@ -30,7 +30,7 @@ public class GlobalMembersBug00181
 			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for writing.\n", "bug00181.gif");
 			Assert.Fail();
 		}
-		gd.gdImageGif(im, new _iobuf(fp));
+		gd.gdImageGif(im, fp);
 		gd.gdImageDestroy(im);
 		C.fclose(fp);
 
@@ -40,7 +40,7 @@ public class GlobalMembersBug00181
 			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for reading.\n", "bug00181.gif");
 			Assert.Fail();
 		}
-		im = gd.gdImageCreateFromGif(new _iobuf(fp));
+		im = gd.gdImageCreateFromGif(fp);
 		C.fclose(fp);
 		if (im == null)
 		{
@@ -66,23 +66,23 @@ public class GlobalMembersBug00181
 			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for writing.\n", "bug00181a.gif");
 			Assert.Fail();
 		}
-		gd.gdImageGifAnimBegin(im, new _iobuf(fp), 1, 3);
-		gd.gdImageGifAnimAdd(im, new _iobuf(fp), 0, 0, 0, 100, 1, null);
+		gd.gdImageGifAnimBegin(im, fp, 1, 3);
+		gd.gdImageGifAnimAdd(im, fp, 0, 0, 0, 100, 1, null);
 		im2 = gd.gdImageCreate(100, 100);
 		im2.interlace = 1;
 		gd.gdImageColorAllocate(im2, 255, 255, 255);
 		gd.gdImagePaletteCopy(im2, im);
 		gd.gdImageRectangle(im2, 0, 0, 15, 15, black);
 		gd.gdImageColorTransparent(im2, trans);
-		gd.gdImageGifAnimAdd(im2, new _iobuf(fp), 0, 0, 0, 100, 1, im);
+		gd.gdImageGifAnimAdd(im2, fp, 0, 0, 0, 100, 1, im);
 		im3 = gd.gdImageCreate(100, 100);
 		im3.interlace = 1;
 		gd.gdImageColorAllocate(im3, 255, 255, 255);
 		gd.gdImagePaletteCopy(im3, im);
 		gd.gdImageRectangle(im3, 0, 0, 15, 20, black);
 		gd.gdImageColorTransparent(im3, trans);
-		gd.gdImageGifAnimAdd(im3, new _iobuf(fp), 0, 0, 0, 100, 1, im2);
-		gd.gdImageGifAnimEnd(new _iobuf(fp));
+		gd.gdImageGifAnimAdd(im3, fp, 0, 0, 0, 100, 1, im2);
+		gd.gdImageGifAnimEnd(fp);
 		C.fclose(fp);
 		gd.gdImageDestroy(im);
 		gd.gdImageDestroy(im2);
@@ -94,7 +94,7 @@ public class GlobalMembersBug00181
 			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for reading.\n", "bug00181a.gif");
 			Assert.Fail();
 		}
-		im = gd.gdImageCreateFromGif(new _iobuf(fp));
+		im = gd.gdImageCreateFromGif(fp);
 		C.fclose(fp);
 		if (im == null)
 		{

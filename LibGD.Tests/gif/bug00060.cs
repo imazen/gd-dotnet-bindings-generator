@@ -20,7 +20,7 @@ public class GlobalMembersBug00060
             Assert.Fail("cannot open <{0}>\n", path);
 		}
 
-		im = gd.gdImageCreateFromGif(new _iobuf(fp));
+		im = gd.gdImageCreateFromGif(fp);
 		C.fclose(fp);
 		gd.gdImageDestroy(im);
 	}

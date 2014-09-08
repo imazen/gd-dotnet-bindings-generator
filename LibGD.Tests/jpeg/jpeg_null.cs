@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -9,13 +10,13 @@ public class GlobalMembersJpeg_null
 	{
 		gdImageStruct im;
 
-		im = gd.gdImageCreateFromJpeg(null);
+        im = gd.gdImageCreateFromJpeg(IntPtr.Zero);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);
 			Assert.Fail();
 		}
-		gd.gdImageJpeg(im, null, 100); // noop safely
+        gd.gdImageJpeg(im, IntPtr.Zero, 100); // noop safely
 	}
 }
 

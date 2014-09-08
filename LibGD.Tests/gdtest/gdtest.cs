@@ -102,7 +102,7 @@ public static class GlobalMembersGdtest
 		{
 			return null;
 		}
-		image = gd.gdImageCreateFromPng(new _iobuf(fp));
+		image = gd.gdImageCreateFromPng(fp);
 		C.fclose(fp);
 		return image;
 	}
@@ -266,13 +266,13 @@ public static class GlobalMembersGdtest
 			fp = C.fopen(file_diff, "wb");
 			if (fp == IntPtr.Zero)
 				goto fail;
-			gd.gdImagePng(surface_diff, new _iobuf(fp));
+			gd.gdImagePng(surface_diff, fp);
 			C.fclose(fp);
 
 			fp = C.fopen(file_out, "wb");
 			if (fp == IntPtr.Zero)
 				goto fail;
-			gd.gdImagePng(actual, new _iobuf(fp));
+			gd.gdImagePng(actual, fp);
 			C.fclose(fp);
 		}
 		else

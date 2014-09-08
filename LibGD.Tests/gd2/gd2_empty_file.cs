@@ -20,7 +20,7 @@ public class GlobalMembersGd2_empty_file
 			Assert.Fail("failed, cannot open file ({0})\n", path);
 		}
 
-		im = gd.gdImageCreateFromGd2(new _iobuf(fp));
+		im = gd.gdImageCreateFromGd2(fp);
 		C.fclose(fp);
 
 		if (im == null)

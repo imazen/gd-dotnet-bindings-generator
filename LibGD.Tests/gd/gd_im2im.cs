@@ -74,7 +74,7 @@ public class GlobalMembersGd_im2im
             var fp = C.fopen(string.Format("gd_im2im_{0}.gd", name), "wb");
             if (fp != IntPtr.Zero)
             {
-                gd.gdImageGd(input, new _iobuf(fp));
+                gd.gdImageGd(input, fp);
                 C.fclose(fp);
             }
         } while (false);

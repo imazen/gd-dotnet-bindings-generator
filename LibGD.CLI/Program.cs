@@ -20,7 +20,7 @@ namespace LibGD.CLI
             }
             if (!File.Exists(args[1]))
             {
-                Console.WriteLine("{0} does not exist.", args[0]);
+                Console.WriteLine("{0} does not exist.", args[1]);
                 return;
             }
             using (new ConsoleCopy("gd-cppsharp-log.txt"))
