@@ -55,6 +55,7 @@ namespace LibGD.CLI
             driver.Options.IgnoreParseWarnings = true;
             driver.Options.CompileCode = true;
             driver.Options.CheckSymbols = true;
+            driver.Options.StripLibPrefix = false;
             driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h").Where(f => Path.GetFileNameWithoutExtension(f) != "gdpp"));
             string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
             driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include"));
