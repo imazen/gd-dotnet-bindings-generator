@@ -6,12 +6,12 @@ namespace LibGD
     public class C
     {
         // FILE *fopen( const char *filename, const char *mode );
-        [DllImport("msvcr120", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("msvcrt", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.SysInt)]
         public static extern IntPtr fopen([In, MarshalAs(UnmanagedType.LPStr)] string filename, [In, MarshalAs(UnmanagedType.LPStr)] string mode);
 
         // int fclose( FILE *stream );
-        [DllImport("msvcr120", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        [DllImport("msvcrt", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.I4)]
         public static extern int fclose([In] IntPtr stream);
     }

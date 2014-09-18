@@ -6,7 +6,7 @@ using LibGD;
 
 public static class GlobalMembersGdtest
 {
-    internal static partial class DefineConstants
+    public static partial class DefineConstants
     {
         public const int GD_H = 1;
         public const int GD_MAJOR_VERSION = 2;

@@ -8,9 +8,9 @@ namespace LibGD.CLI
     {
         static void Main(string[] args)
         {
-            if (args.Length < 2)
+            if (args.Length < 3)
             {
-                Console.WriteLine("Usage: LibGD.CLI.exe [include_dir_of_libd] [library(.dll/.lib)_file]");
+                Console.WriteLine("Usage: LibGD.CLI.exe [include_dir_of_libd] [GCC/MinGW_make_exe] [library(.dll)_file]");
                 return;
             }
             if (!Directory.Exists(args[0]))
@@ -20,13 +20,15 @@ namespace LibGD.CLI
             }
             if (!File.Exists(args[1]))
             {
-                Console.WriteLine("{0} does not exist.", args[1]);
+                Console.WriteLine("{0} does not exist or is not a directory.", args[1]);
                 return;
             }
-            using (new ConsoleCopy("gd-cppsharp-log.txt"))
+            if (!File.Exists(args[2]))
             {
-                ConsoleDriver.Run(new LibGDSharp(args[0], args[1]));
+                Console.WriteLine("{0} does not exist.", args[2]);
+                return;
             }
+            ConsoleDriver.Run(new LibGDSharp(args[0], args[1], args[2]));
         }
     }
 }
