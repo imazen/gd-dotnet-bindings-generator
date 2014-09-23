@@ -56,14 +56,13 @@ namespace LibGD.CLI
             driver.Options.CompileCode = true;
             driver.Options.CheckSymbols = true;
             driver.Options.StripLibPrefix = false;
+            driver.Options.GenerateSingleCSharpFile = true;
             driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h").Where(f => Path.GetFileNameWithoutExtension(f) != "gdpp"));
             string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
             driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include"));
             driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++"));
             driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++", target));
             driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include", "c++"));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include", "c++", target));
             driver.Options.addIncludeDirs(includeDir);
             driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
