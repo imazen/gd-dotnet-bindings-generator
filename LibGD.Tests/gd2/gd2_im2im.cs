@@ -75,7 +75,7 @@ public class GlobalMembersGd2_im2im
             fp = C.fopen(string.Format("gd2_im2im_{0}.gd2", name), "wb");
             if (fp != IntPtr.Zero)
             {
-                gd.gdImageGd2(src, new _iobuf(fp),
+                gd.gdImageGd2(src, fp,
                     (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN +
                      GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX)/2,
                     GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);

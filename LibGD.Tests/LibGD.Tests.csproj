@@ -68,6 +68,8 @@
     <Compile Include="bmp\bmp_null.cs" />
     <Compile Include="freetype\bug00132.cs" />
     <Compile Include="gd2\gd2_empty_file.cs" />
+    <Compile Include="gd2\gd2_im2im.cs" />
+    <Compile Include="gd2\gd2_null.cs" />
     <Compile Include="gd2\gd2_read.cs" />
     <Compile Include="gdimagearc\bug00079.cs" />
     <Compile Include="gdimagecolorclosest\gdimagecolorclosest.cs" />
@@ -105,6 +107,8 @@
     <Compile Include="gdimagerotate\bug00067.cs" />
     <Compile Include="gdimagerotate\php_bug_64898.cs" />
     <Compile Include="gdimagesetpixel\bug00186.cs" />
+    <Compile Include="gdinterpolatedscale\gdModesAndPalettes.cs" />
+    <Compile Include="gdinterpolatedscale\gdTrivialResize.cs" />
     <Compile Include="gdtest\gdtest.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -173,7 +177,6 @@
     <Folder Include="gdimagescatterex\" />
     <Folder Include="gdimagestringftex\" />
     <Folder Include="gdimagestringft\" />
-    <Folder Include="gdinterpolatedscale\" />
     <Folder Include="gdnewfilectx\" />
     <Folder Include="gdtiled\" />
   </ItemGroup>
