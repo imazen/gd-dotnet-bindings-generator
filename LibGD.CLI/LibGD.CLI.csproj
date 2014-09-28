@@ -86,9 +86,6 @@
     <Reference Include="CppSharp.Runtime">
       <HintPath>..\References\CppSharp.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="LibGDSharp">
-      <HintPath>bin\Debug\LibGDSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -111,12 +108,6 @@
       <Link>CppSharp.CppParser.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\LibGD.Tests\LibGD.Tests.csproj">
-      <Project>{6FDDF983-054E-4018-B243-FD9CF2943845}</Project>
-      <Name>LibGD.Tests</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
