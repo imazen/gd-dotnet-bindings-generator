@@ -68,6 +68,7 @@ namespace LibGD.CLI
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
+            driver.Options.CodeFiles.Add(Path.Combine(dir, "LibGDExtensions.cs"));
         }
 
         public void SetupPasses(Driver driver)

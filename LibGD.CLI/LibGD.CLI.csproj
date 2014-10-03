@@ -92,6 +92,9 @@
   <ItemGroup>
     <Compile Include="ConsoleCopy.cs" />
     <Compile Include="FILE.cs" />
+    <None Include="LibGDExtensions.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Compile Include="LibGDSharp.cs" />
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
