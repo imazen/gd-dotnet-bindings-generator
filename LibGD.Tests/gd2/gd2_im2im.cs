@@ -15,8 +15,7 @@ public class GlobalMembersGd2_im2im
 		int b;
 		void* p;
 		int size = 0;
-		int status = 0;
-		GlobalMembersGdtest.CuTestImageResult result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
+        GlobalMembersGdtest.CuTestImageResult result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
 
 		src = gd.gdImageCreate(100, 100);
 		if (src == null)
@@ -34,37 +33,35 @@ public class GlobalMembersGd2_im2im
 		p = gd.gdImageGd2Ptr(src, (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN + GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX) / 2, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED, &size);
 		if (p == null)
 		{
-			status = 1;
-			Console.Write("p is null\n");
-			goto door0;
+            gd.gdImageDestroy(src);
+            Assert.Fail("p is null\n");
 		}
 		if (size <= 0)
 		{
-			status = 1;
-			Console.Write("size is non-positive\n");
-			goto door1;
+            gd.gdFree(p);
+		    gd.gdImageDestroy(src);
+			Assert.Fail("size is non-positive\n");
 		}
 
 		dst = gd.gdImageCreateFromGd2Ptr(size, p);
 		if (dst == null)
 		{
-			status = 1;
-			Console.Write("could not create dst\n");
-			goto door1;
+            gd.gdFree(p);
+            gd.gdImageDestroy(src);
+			Assert.Fail("could not create dst\n");
 		}
         OutputGd2(dst, "dst");
 		GlobalMembersGdtest.gdTestImageDiff(src, dst, null, result);
 		if (result.pixels_changed > 0)
 		{
-			status = 1;
-			Console.Write("pixels changed: {0:D}\n", result.pixels_changed);
+            gd.gdImageDestroy(dst);
+            gd.gdFree(p);
+            gd.gdImageDestroy(src);
+			Assert.Fail("pixels changed: {0:D}\n", result.pixels_changed);
 		}
 		gd.gdImageDestroy(dst);
-	door1:
-		gd.gdFree(p);
-	door0:
-		gd.gdImageDestroy(src);
-		Assert.AreEqual(0, status);
+        gd.gdFree(p);
+        gd.gdImageDestroy(src);
 	}
 
     private static void OutputGd2(gdImageStruct src, string name)

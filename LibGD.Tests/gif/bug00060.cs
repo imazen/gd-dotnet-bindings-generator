@@ -9,19 +9,11 @@ public class GlobalMembersBug00060
     public void TestBug00060()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
+        string path = new string(new char[1024]);
 
 		path = string.Format("{0}/gif/bug00060.gif", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-		fp = C.fopen(path, "rb");
 
-		if (fp == IntPtr.Zero)
-		{
-            Assert.Fail("cannot open <{0}>\n", path);
-		}
-
-		im = gd.gdImageCreateFromGif(fp);
-		C.fclose(fp);
+		im = gd.gdImageCreateFromGif(path);
 		gd.gdImageDestroy(im);
 	}
 }

@@ -9,19 +9,10 @@ public class GlobalMembersGd2_empty_file
     public void TestGd2EmptyFile()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
+        string path = new string(new char[1024]);
 
 		path = string.Format("{0}/gd2/empty.gd2", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-
-		fp = C.fopen(path, "rb");
-		if (fp == IntPtr.Zero)
-		{
-			Assert.Fail("failed, cannot open file ({0})\n", path);
-		}
-
-		im = gd.gdImageCreateFromGd2(fp);
-		C.fclose(fp);
+		im = gd.gdImageCreateFromGd2(path);
 
 		if (im == null)
 		{

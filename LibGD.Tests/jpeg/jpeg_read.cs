@@ -9,19 +9,11 @@ public class GlobalMembersJpeg_read
     public void TestJpeg_read()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
+        string path = new string(new char[1024]);
 
 		path = string.Format("{0}/jpeg/conv_test.jpeg", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-		fp = C.fopen(path, "rb");
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "failed, cannot open file: %s\n", path);
-            Assert.Fail();
-		}
 
-		im = gd.gdImageCreateFromJpeg(fp);
-		C.fclose(fp);
+        im = gd.gdImageCreateFromJpeg(path);
 
 		if (im == null)
 		{

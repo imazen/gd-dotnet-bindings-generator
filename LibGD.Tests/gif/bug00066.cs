@@ -1,4 +1,3 @@
-using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -9,20 +8,11 @@ public class GlobalMembersBug00066
     public void TestBug00066()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
-		int error = 0;
+        string path = new string(new char[1024]);
 
-		path = string.Format("{0}/gif/bug00066.gif", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-		fp = C.fopen(path, "rb");
+        path = string.Format("{0}/gif/bug00066.gif", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 
-		if (fp == IntPtr.Zero)
-		{
-            Assert.Fail("cannot open <{0}>\n", path);
-		}
-
-		im = gd.gdImageCreateFromGif(fp);
-		C.fclose(fp);
+		im = gd.gdImageCreateFromGif(path);
 
 		path = string.Format("{0}/gif/bug00066_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)

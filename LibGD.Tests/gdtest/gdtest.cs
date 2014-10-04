@@ -94,16 +94,7 @@ public static class GlobalMembersGdtest
 	{
 		gdImageStruct image;
 
-		IntPtr fp;
-
-		fp = C.fopen(filename, "rb");
-
-		if (fp == IntPtr.Zero)
-		{
-			return null;
-		}
-		image = gd.gdImageCreateFromPng(fp);
-		C.fclose(fp);
+	    image = gd.gdImageCreateFromPng(filename);
 		return image;
 	}
 

@@ -10,20 +10,10 @@ public class GlobalMembersGd2_read
 	{
 		int error;
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
+        string path = new string(new char[1024]);
 
 		path = string.Format("{0}/gd2/conv_test.gd2", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-
-		fp = C.fopen(path, "rb");
-		if (fp == IntPtr.Zero)
-		{
-			Console.Write("failed, cannot open file\n");
-			Assert.Fail("failed, cannot open file\n");
-		}
-
-		im = gd.gdImageCreateFromGd2(fp);
-		C.fclose(fp);
+		im = gd.gdImageCreateFromGd2(path);
 
 		path = string.Format("{0}/gd2/conv_test_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)

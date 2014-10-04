@@ -10,7 +10,7 @@ public class GlobalMembersJpeg_null
 	{
 		gdImageStruct im;
 
-        im = gd.gdImageCreateFromJpeg(IntPtr.Zero);
+        im = gd.gdImageCreateFromJpeg((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);

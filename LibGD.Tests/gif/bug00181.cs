@@ -34,14 +34,7 @@ public class GlobalMembersBug00181
 		gd.gdImageDestroy(im);
 		C.fclose(fp);
 
-		fp = C.fopen("bug00181.gif", "rb");
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for reading.\n", "bug00181.gif");
-			Assert.Fail();
-		}
-		im = gd.gdImageCreateFromGif(fp);
-		C.fclose(fp);
+        im = gd.gdImageCreateFromGif("bug00181.gif");
 		if (im == null)
 		{
 			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot create image from <%s>\n", "bug00181.gif");
@@ -88,14 +81,7 @@ public class GlobalMembersBug00181
 		gd.gdImageDestroy(im2);
 		gd.gdImageDestroy(im3);
 
-		fp = C.fopen("bug00181a.gif", "rb");
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for reading.\n", "bug00181a.gif");
-			Assert.Fail();
-		}
-		im = gd.gdImageCreateFromGif(fp);
-		C.fclose(fp);
+        im = gd.gdImageCreateFromGif("bug00181a.gif");
 		if (im == null)
 		{
             GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot create image from <%s>\n", "bug00181a.gif");

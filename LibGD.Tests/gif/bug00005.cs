@@ -13,8 +13,7 @@ public class GlobalMembersBug00005
 		int[] valid = {0, 0, 0, 0};
 		string[] exp = {null, null, "bug00005_2_exp.png", null};
 		const int files_cnt = 4;
-		IntPtr fp;
-		int i = 0;
+        int i = 0;
 		int error = 0;
 		string path = new string(new char[1024]);
 
@@ -22,15 +21,7 @@ public class GlobalMembersBug00005
 		{
 			path = string.Format("{0}/gif/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, giffiles[i]);
 
-			fp = C.fopen(path, "rb");
-			if (fp == IntPtr.Zero)
-			{
-				GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "<%s> Input file does not exist!\n", path);
-				Assert.Fail();
-			}
-
-			im = gd.gdImageCreateFromGif(fp);
-			C.fclose(fp);
+			im = gd.gdImageCreateFromGif(path);
 
 			if (valid[i] != 0)
 			{

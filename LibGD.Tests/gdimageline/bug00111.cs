@@ -9,8 +9,7 @@ public class GlobalMembersBug00111
     public void TestBug00111()
 	{
 		gdImageStruct im;
-		int error = 0;
-		string path = new string(new char[2048]);
+        string path = new string(new char[2048]);
 		string file_exp = "bug00111_exp.png";
 
 		im = gd.gdImageCreateTrueColor(10, 10);
@@ -27,16 +26,10 @@ public class GlobalMembersBug00111
 		path = string.Format("{0}/gdimageline/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_exp);
 		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)
 		{
-			error = 1;
-			Console.Write("Reference image and destination differ\n");
+			Assert.Fail("Reference image and destination differ\n");
 		}
 
 		gd.gdImageDestroy(im);
-
-        if (error != 0)
-        {
-            Assert.Fail("Error: {0}", error);
-        }
 	}
 }
 

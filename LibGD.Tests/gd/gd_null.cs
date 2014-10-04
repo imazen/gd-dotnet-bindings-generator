@@ -10,7 +10,7 @@ public class GlobalMembersGd_null
 	{
 		gdImageStruct im;
 
-        im = gd.gdImageCreateFromGd(IntPtr.Zero);
+        im = gd.gdImageCreateFromGd((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);

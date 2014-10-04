@@ -12,7 +12,7 @@ public class GlobalMembersPng_null
 
 		//gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
 
-		im = gd.gdImageCreateFromPng(IntPtr.Zero);
+		im = gd.gdImageCreateFromPng((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);

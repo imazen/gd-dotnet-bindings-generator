@@ -13,24 +13,12 @@ public class GlobalMembersBug00067
 		string path = new string(new char[2048]);
 		string file_im = "gdimagerotate/remirh128.jpg";
 		string file_exp = "gdimagerotate/bug00067";
-		IntPtr fp;
-		int color;
+        int color;
 		int error = 0;
 		int angle;
 
 		path = string.Format("{0}/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_im);
-
-		fp = C.fopen(path, "rb");
-
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "opening Jpeg %s for reading failed.\n", path);
-			Assert.Fail();
-		}
-
-		im = gd.gdImageCreateFromJpeg(fp);
-
-		C.fclose(fp);
+		im = gd.gdImageCreateFromJpeg(path);
 
 		if (im == null)
 		{

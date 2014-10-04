@@ -10,17 +10,9 @@ public class GlobalMembersGd_num_colors
 	{
 		gdImageStruct im;
 		string path = new string(new char[1024]);
-		IntPtr fp;
 
-		path = string.Format("{0}/gd/crafted_num_colors.gd", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-
-		fp = C.fopen(path, "rb");
-		if (fp == IntPtr.Zero)
-		{
-            Assert.Fail();
-		}
-		im = gd.gdImageCreateFromGd(fp);
-		C.fclose(fp);
+        path = string.Format("{0}/gd/crafted_num_colors.gd", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+		im = gd.gdImageCreateFromGd(path);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);

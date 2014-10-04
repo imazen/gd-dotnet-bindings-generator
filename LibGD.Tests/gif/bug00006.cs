@@ -43,15 +43,7 @@ public class GlobalMembersBug00006
 		C.fclose(fp);
 
 		gd.gdImageDestroy(im);
-
-		fp = C.fopen(TMP_FN, "rb");
-		if (fp == IntPtr.Zero)
-		{
-            GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for reading\n", TMP_FN);
-            Assert.Fail();
-		}
-		im = gd.gdImageCreateFromGif(fp);
-		C.fclose(fp);
+		im = gd.gdImageCreateFromGif(TMP_FN);
 
 		if (im == null)
 		{

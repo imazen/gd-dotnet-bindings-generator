@@ -8,7 +8,7 @@ public class GlobalMembersBmp_null
     [Test]
 	public void TestBmpNull()
 	{
-        gdImageStruct im = gd.gdImageCreateFromBmp(IntPtr.Zero);
+        gdImageStruct im = gd.gdImageCreateFromBmp((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);

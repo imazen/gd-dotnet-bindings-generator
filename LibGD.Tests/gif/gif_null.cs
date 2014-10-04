@@ -10,7 +10,7 @@ public class GlobalMembersGif_null
 	{
 		gdImageStruct im;
 
-        im = gd.gdImageCreateFromGif(IntPtr.Zero);
+        im = gd.gdImageCreateFromGif((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);
