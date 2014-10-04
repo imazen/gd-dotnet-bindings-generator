@@ -236,13 +236,11 @@ public static class GlobalMembersGdtest
 		{
 			string file_diff = new string(new char[255]);
 			string file_out = new string(new char[1024]);
-			IntPtr fp;
-			int len;
-			int p;
+		    int p;
 
 			GlobalMembersGdtest.gdTestErrorMsg(file, line, "Total pixels changed: %d with a maximum channel difference of %d.\n", result.pixels_changed, result.max_diff);
 
-			p = len = file.Length;
+			p = file.Length;
 			p--;
 
 			/* Use only the filename (and store it in the bld dir not the src dir
@@ -254,17 +252,9 @@ public static class GlobalMembersGdtest
 			file_diff = string.Format("{0}_{1:D}_diff.png", file + p + 1, line);
 			file_out = string.Format("{0}_{1:D}_out.png", file + p + 1, line);
 
-			fp = C.fopen(file_diff, "wb");
-			if (fp == IntPtr.Zero)
-				goto fail;
-			gd.gdImagePng(surface_diff, fp);
-			C.fclose(fp);
+		    gd.gdImagePng(surface_diff, file_diff);
 
-			fp = C.fopen(file_out, "wb");
-			if (fp == IntPtr.Zero)
-				goto fail;
-			gd.gdImagePng(actual, fp);
-			C.fclose(fp);
+		    gd.gdImagePng(actual, file_out);
 		}
 		else
 		{

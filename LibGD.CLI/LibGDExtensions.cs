@@ -183,5 +183,84 @@ namespace LibGD
             }
             return result;
         }
+
+
+        public static void gdImageBmp(gdImageStruct im, string outFile, int compression)
+        {
+            var fp = C.fopen(outFile, "wb");
+            try
+            {
+                gd.gdImageBmp(im, fp, 1);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
+
+        public static void gdImageGd(gdImageStruct im, string outFile)
+        {
+            var fp = C.fopen(outFile, "wb");
+            try
+            {
+                gd.gdImageGd(im, fp);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
+
+        public static void gdImageGd2(gdImageStruct im, string @out, int cs, int fmt)
+        {
+            var fp = C.fopen(@out, "wb");
+            try
+            {
+                gd.gdImageGd2(im, fp, cs, fmt);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
+
+        public static void gdImagePng(gdImageStruct im, string outFile)
+        {
+            var fp = C.fopen(outFile, "wb");
+            try
+            {
+                gd.gdImagePng(im, fp);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
+
+        public static void gdImageJpeg(gdImageStruct im, string @out, int quality)
+        {
+            var fp = C.fopen(@out, "wb");
+            try
+            {
+                gd.gdImageJpeg(im, fp, quality);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
+
+        public static void gdImageGif(gdImageStruct im, string outFile)
+        {
+            var fp = C.fopen(outFile, "wb");
+            try
+            {
+                gd.gdImageGif(im, fp);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
     }
 }

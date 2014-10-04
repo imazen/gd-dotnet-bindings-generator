@@ -66,15 +66,7 @@ public class GlobalMembersGd_im2im
 
     private static void OutputGd(gdImageStruct input, string name)
     {
-        do
-        {
-            var fp = C.fopen(string.Format("gd_im2im_{0}.gd", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImageGd(input, fp);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImageGd(input, string.Format("gd_im2im_{0}.gd", name));
     }
 }
 

@@ -16,7 +16,7 @@ public class GlobalMembersGd2_null
 			gd.gdImageDestroy(im);
 			Assert.Fail();
 		}
-		gd.gdImageGd2(im, IntPtr.Zero, 0, GlobalMembersGdtest.DefineConstants.GD2_FMT_RAW); // noop safely
+		gd.gdImageGd2(im, null, 0, GlobalMembersGdtest.DefineConstants.GD2_FMT_RAW); // noop safely
 	}
 }
 

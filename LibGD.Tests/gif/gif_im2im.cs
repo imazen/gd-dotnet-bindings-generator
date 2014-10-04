@@ -67,16 +67,7 @@ public class GlobalMembersGif_im2im
 
     private static void OutputGif(gdImageStruct input, string name)
     {
-        do
-        {
-            IntPtr fp;
-            fp = C.fopen(string.Format("gif_im2im_{0}.gif", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImageBmp(input, fp, 1);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImageGif(input, string.Format("gif_im2im_{0}.gif", name));
     }
 }
 

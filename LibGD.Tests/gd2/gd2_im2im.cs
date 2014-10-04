@@ -66,19 +66,10 @@ public class GlobalMembersGd2_im2im
 
     private static void OutputGd2(gdImageStruct src, string name)
     {
-        do
-        {
-            IntPtr fp;
-            fp = C.fopen(string.Format("gd2_im2im_{0}.gd2", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImageGd2(src, fp,
-                    (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN +
-                     GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX)/2,
-                    GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImageGd2(src, string.Format("gd2_im2im_{0}.gd2", name),
+            (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN +
+             GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX) / 2,
+            GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);
     }
 }
 

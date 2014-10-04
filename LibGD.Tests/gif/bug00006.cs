@@ -12,8 +12,7 @@ public class GlobalMembersBug00006
     public void TestBug00006()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		const int r = 255;
+        const int r = 255;
 		const int g = 0;
 		const int b = 0;
 		int r_f;
@@ -33,14 +32,7 @@ public class GlobalMembersBug00006
 		gd.gdImageColorTransparent(im, trans_c);
 		gd.gdImageFilledRectangle(im, 0,0, 192,36, trans_c);
 
-		fp = C.fopen(TMP_FN, "wb");
-		if (fp == IntPtr.Zero)
-		{
-            GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for writing\n", TMP_FN);
-            Assert.Fail();
-		}
-		gd.gdImageGif(im,fp);
-		C.fclose(fp);
+        gd.gdImageGif(im, TMP_FN);
 
 		gd.gdImageDestroy(im);
 		im = gd.gdImageCreateFromGif(TMP_FN);

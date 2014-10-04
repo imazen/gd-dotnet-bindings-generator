@@ -14,7 +14,7 @@ public class GlobalMembersBmp_null
 			gd.gdImageDestroy(im);
             Assert.Fail("gdImageCreateFromBmp returns non-null when passed null.");
 		}
-        gd.gdImageBmp(im, IntPtr.Zero, 0); // noop safely
+        gd.gdImageBmp(im, null, 0); // noop safely
 	}
 }
 

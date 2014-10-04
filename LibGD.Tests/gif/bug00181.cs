@@ -24,15 +24,8 @@ public class GlobalMembersBug00181
 			Assert.Fail();
 		}
 		im.interlace = 1;
-		fp = C.fopen("bug00181.gif", "wb");
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot open <%s> for writing.\n", "bug00181.gif");
-			Assert.Fail();
-		}
-		gd.gdImageGif(im, fp);
+        gd.gdImageGif(im, "bug00181.gif");
 		gd.gdImageDestroy(im);
-		C.fclose(fp);
 
         im = gd.gdImageCreateFromGif("bug00181.gif");
 		if (im == null)

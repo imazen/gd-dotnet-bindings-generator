@@ -65,16 +65,7 @@ public class GlobalMembersPng_im2im
 
     private static void OutputPng(gdImageStruct input, string name)
     {
-        do
-        {
-            IntPtr fp;
-            fp = C.fopen(string.Format("png_im2im_{0}.png", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImagePng(input, fp);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImagePng(input, string.Format("png_im2im_{0}.png", name));
     }
 }
 

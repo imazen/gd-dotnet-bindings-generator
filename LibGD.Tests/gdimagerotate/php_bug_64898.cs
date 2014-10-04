@@ -13,20 +13,10 @@ public class GlobalMembersPhp_bug_64898
 		string path = new string(new char[2048]);
 		string file_im = "gdimagerotate/php_bug_64898.png";
 		string file_exp = "gdimagerotate/php_bug_64898_exp.png";
-		IntPtr fp;
-		int color;
 
-		path = string.Format("{0}/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_im);
+        path = string.Format("{0}/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_im);
 
-		fp = C.fopen(path, "rb");
-
-		if (fp == IntPtr.Zero)
-		{
-			GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "opening PNG %s for reading failed.\n", path);
-			Assert.Fail();
-		}
-
-		im = gd.gdImageCreateTrueColor(141, 200);
+        im = gd.gdImageCreateTrueColor(141, 200);
 
 		if (im == null)
 		{

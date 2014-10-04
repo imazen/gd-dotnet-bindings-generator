@@ -18,7 +18,7 @@ public class GlobalMembersPng_null
 			gd.gdImageDestroy(im);
 			Assert.Fail();
 		}
-		gd.gdImagePng(im, IntPtr.Zero); // noop safely
+		gd.gdImagePng(im, null); // noop safely
 	}
 }
 

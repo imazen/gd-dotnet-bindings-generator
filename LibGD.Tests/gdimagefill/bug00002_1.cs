@@ -12,8 +12,7 @@ public class GlobalMembersBug00002_1
     public void TestBug00002_1()
 	{
 		gdImageStruct im;
-		IntPtr fp;
-		string path = new string(new char[1024]);
+        string path = new string(new char[1024]);
 
 		im = gd.gdImageCreateTrueColor(100, 100);
 
@@ -26,16 +25,7 @@ public class GlobalMembersBug00002_1
 		gd.gdImageFill(im, 0, 0, 0xffffff);
 		gd.gdImageFill(im, 0, 0, 0xffffff);
 
-		fp = C.fopen(TMP_FN, "wb");
-		if (fp == IntPtr.Zero)
-		{
-            GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot create image from <%s>\n", TMP_FN);
-			gd.gdImageDestroy(im);
-            Assert.Fail();
-		}
-
-		gd.gdImagePng(im, fp);
-		C.fclose(fp);
+        gd.gdImagePng(im, TMP_FN);
 
 		path = string.Format("{0}/gdimagefill/bug00002_1_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)

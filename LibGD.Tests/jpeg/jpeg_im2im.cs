@@ -66,16 +66,7 @@ public class GlobalMembersJpeg_im2im
 
     private static void OutputJpeg(gdImageStruct input, string name)
     {
-        do
-        {
-            IntPtr fp;
-            fp = C.fopen(string.Format("jpeg_im2im_{0}.jpeg", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImageBmp(input, fp, 1);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImageJpeg(input, string.Format("jpeg_im2im_{0}.jpeg", name), 1);
     }
 }
 

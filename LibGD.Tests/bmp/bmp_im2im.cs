@@ -67,15 +67,6 @@ public class GlobalMembersBmp_im2im
 
     private static void OutputBmp(gdImageStruct input, string name)
     {
-        do
-        {
-            IntPtr fp;
-            fp = C.fopen(string.Format("bmp_im2im_{0}.bmp", name), "wb");
-            if (fp != IntPtr.Zero)
-            {
-                gd.gdImageBmp(input, fp, 1);
-                C.fclose(fp);
-            }
-        } while (false);
+        gd.gdImageBmp(input, string.Format("bmp_im2im_{0}.bmp", name), 1);
     }
 }

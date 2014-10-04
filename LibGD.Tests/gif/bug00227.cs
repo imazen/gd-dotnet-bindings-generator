@@ -18,7 +18,6 @@ public class GlobalMembersBug00227
 		gdImageStruct im1;
 		gdImageStruct im2;
 		int i;
-		string buf;
 
 		/* generate a GIF animation */
 		im0 = gd.gdImageCreate(WIDTH, HEIGHT);
