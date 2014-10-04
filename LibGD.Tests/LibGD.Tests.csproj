@@ -143,6 +143,9 @@
     <Compile Include="png\png_null.cs" />
     <Compile Include="png\png_resolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="tga\tga_null.cs" />
+    <Compile Include="tiff\tiff_im2im.cs" />
+    <Compile Include="tiff\tiff_null.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="freetype\DejaVuSans.ttf">

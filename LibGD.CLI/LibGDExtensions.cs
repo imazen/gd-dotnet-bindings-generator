@@ -262,5 +262,18 @@ namespace LibGD
                 C.fclose(fp);
             }
         }
+
+        public static void gdImageTiff(gdImageStruct im, string outFile)
+        {
+            var fp = C.fopen(outFile, "wb");
+            try
+            {
+                gd.gdImageTiff(im, fp);
+            }
+            finally
+            {
+                C.fclose(fp);
+            }
+        }
     }
 }
