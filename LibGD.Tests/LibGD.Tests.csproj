@@ -112,16 +112,26 @@
     <Compile Include="gdtest\gdtest.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="gdtiled\bug00032.cs" />
     <Compile Include="gd\gd_im2im.cs" />
     <Compile Include="gd\gd_null.cs" />
     <Compile Include="gd\gd_num_colors.cs" />
+    <Compile Include="gd\gd_versiontest.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="gif\bug00005.cs" />
     <Compile Include="gif\bug00005_2.cs" />
+    <Compile Include="gif\bug00006.cs" />
     <Compile Include="gif\bug00060.cs" />
     <Compile Include="gif\bug00066.cs" />
     <Compile Include="gif\bug00181.cs" />
+    <Compile Include="gif\bug00227.cs" />
+    <Compile Include="gif\gif_im2im.cs" />
     <Compile Include="gif\gif_null.cs" />
     <Compile Include="jpeg\jpeg_empty_file.cs" />
+    <Compile Include="jpeg\jpeg_im2im.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="jpeg\jpeg_null.cs" />
     <Compile Include="jpeg\jpeg_read.cs" />
     <Compile Include="jpeg\jpeg_resolution.cs" />
@@ -129,6 +139,9 @@
     <Compile Include="png\bug00033.cs" />
     <Compile Include="png\bug00086.cs" />
     <Compile Include="png\bug00088.cs" />
+    <Compile Include="png\png_im2im.cs" />
+    <Compile Include="png\png_null.cs" />
+    <Compile Include="png\png_resolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -178,7 +191,6 @@
     <Folder Include="gdimagestringftex\" />
     <Folder Include="gdimagestringft\" />
     <Folder Include="gdnewfilectx\" />
-    <Folder Include="gdtiled\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="gdimagefill\bug00002_1_exp.png">
@@ -388,6 +400,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="png\bug00088_2_exp.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="gdtiled\bug00032_exp.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

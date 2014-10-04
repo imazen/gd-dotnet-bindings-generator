@@ -6,17 +6,16 @@ using NUnit.Framework;
 public class GlobalMembersJpeg_im2im
 {
     [Test]
-    public void TestJpeg_im2im()
+    public unsafe void TestJpeg_im2im()
 	{
 		gdImageStruct src;
 		gdImageStruct dst;
 		int r;
 		int g;
 		int b;
-		object p;
+		void* p;
 		int size = 0;
-		int status = 0;
-	#if false
+#if false
 	//	CuTestImageResult result = {0, 0};
 	#endif
 
@@ -31,52 +30,28 @@ public class GlobalMembersJpeg_im2im
 		gd.gdImageFilledRectangle(src, 0, 0, 99, 99, r);
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
-
-	//C++ TO C# CONVERTER NOTE: The following #define macro was replaced in-line:
-	//ORIGINAL LINE: #define OUTPUT_JPEG(name) do { FILE *fp; fp = fopen("jpeg_im2im_" #name ".jpeg", "wb"); if (fp) { gd.gdImageJpeg(name, fp, 100); fclose(fp); } } while (0)
-	#define OUTPUT_JPEG
-
-		do
-		{
-			FILE fp;
-			fp = fopen("jpeg_im2im_" "src" ".jpeg", "wb");
-			if (fp != null)
-			{
-				gd.gdImageJpeg(src, fp, 100);
-				fclose(fp);
-			}
-		} while (0);
-		p = gd.gdImageJpegPtr(src, size, 100);
+        OutputJpeg(src, "src");
+		p = gd.gdImageJpegPtr(src, &size, 100);
 		if (p == null)
 		{
-			status = 1;
-			Console.Write("p is null\n");
-			goto door0;
+		    gd.gdImageDestroy(src);
+            Assert.Fail("p is null\n");
 		}
 		if (size <= 0)
 		{
-			status = 1;
-			Console.Write("size is non-positive\n");
-			goto door1;
+            gd.gdFree(p);
+            gd.gdImageDestroy(src);
+			Assert.Fail("size is non-positive\n");
 		}
 
 		dst = gd.gdImageCreateFromJpegPtr(size, p);
 		if (dst == null)
 		{
-			status = 1;
-			Console.Write("could not create dst\n");
-			goto door1;
+            gd.gdFree(p);
+		    gd.gdImageDestroy(src);
+			Assert.Fail("could not create dst\n");
 		}
-		do
-		{
-			FILE fp;
-			fp = fopen("jpeg_im2im_" "dst" ".jpeg", "wb");
-			if (fp != null)
-			{
-				gd.gdImageJpeg(dst, fp, 100);
-				fclose(fp);
-			}
-		} while (0);
+        OutputJpeg(dst, "dst");
 	#if false
 	//	gd.gdTestImageDiff(src, dst, NULL, &result);
 	//	if (result.pixels_changed > 0) {
@@ -85,11 +60,22 @@ public class GlobalMembersJpeg_im2im
 	//	}
 	#endif
 		gd.gdImageDestroy(dst);
-	door1:
-		gd.gdFree(p);
-	door0:
-		gd.gdImageDestroy(src);
-		return status;
+        gd.gdFree(p);
+        gd.gdImageDestroy(src);
 	}
+
+    private static void OutputJpeg(gdImageStruct input, string name)
+    {
+        do
+        {
+            IntPtr fp;
+            fp = C.fopen(string.Format("jpeg_im2im_{0}.jpeg", name), "wb");
+            if (fp != IntPtr.Zero)
+            {
+                gd.gdImageBmp(input, fp, 1);
+                C.fclose(fp);
+            }
+        } while (false);
+    }
 }
 
