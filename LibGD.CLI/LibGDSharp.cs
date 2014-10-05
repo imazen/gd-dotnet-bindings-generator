@@ -42,7 +42,7 @@ namespace LibGD.CLI
             string target = Regex.Match(output, @"Target:\s*(?<target>[^\r\n]+)").Groups["target"].Value;
             string compilerVersion = Regex.Match(output, @"gcc\s+version\s+(?<version>\S+)").Groups["version"].Value;
 
-            driver.Options.addDefines("_WIN32");
+			driver.Options.addDefines("_CRTIMP=");
             driver.Options.GeneratorKind = GeneratorKind.CSharp;
             driver.Options.LanguageVersion = LanguageVersion.C;
             driver.Options.NoBuiltinIncludes = true;
