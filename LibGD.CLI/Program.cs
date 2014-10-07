@@ -8,10 +8,20 @@ namespace LibGD.CLI
     {
         static void Main(string[] args)
         {
-            if (args.Length < 3)
+            if (args.Length < 2)
             {
-                Console.WriteLine("Usage: LibGD.CLI.exe [include_dir_of_libd] [GCC/MinGW_make_exe] [library(.dll)_file]");
+                Console.WriteLine("Usage: LibGD.CLI.exe [include_dir_of_libd] [GCC/MinGW_make_exe (optional) - skip for VC++] [library(.dll)_file]");
                 return;
+            }
+            LibGDSharp libGdSharp = null;
+            switch (args.Length)
+            {
+                case 2:
+                    libGdSharp = new LibGDSharp(args[0], args[1]);
+                    break;
+                default:
+                    libGdSharp = new LibGDSharp(args[0], args[1], args[2]);
+                    break;
             }
             if (!Directory.Exists(args[0]))
             {
@@ -20,17 +30,17 @@ namespace LibGD.CLI
             }
             if (!File.Exists(args[1]))
             {
-                Console.WriteLine("{0} does not exist or is not a directory.", args[1]);
+                Console.WriteLine(args.Length > 2 ? "{0} does not exist or is not a directory." : "{0} does not exist.", args[1]);
                 return;
             }
-            if (!File.Exists(args[2]))
+            if (args.Length > 2 && !File.Exists(args[2]))
             {
                 Console.WriteLine("{0} does not exist.", args[2]);
                 return;
             }
             using (new ConsoleCopy("gd-cppsharp-log.txt"))
             {
-                ConsoleDriver.Run(new LibGDSharp(args[0], args[1], args[2]));
+                ConsoleDriver.Run(libGdSharp);
             }
         }
     }

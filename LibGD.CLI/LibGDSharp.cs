@@ -16,6 +16,12 @@ namespace LibGD.CLI
         private readonly string make;
         private readonly string libraryFile;
 
+        public LibGDSharp(string includeDir, string libraryFile)
+        {
+            this.includeDir = includeDir;
+            this.libraryFile = libraryFile;
+        }
+
         public LibGDSharp(string includeDir, string make, string libraryFile)
         {
             this.includeDir = includeDir;
@@ -33,22 +39,36 @@ namespace LibGD.CLI
 
         public void Setup(Driver driver)
         {
-            string error;
-            string output = ProcessHelper.Run(Path.Combine(Path.GetDirectoryName(this.make), "gcc"), "-v", out error);
-            if (string.IsNullOrEmpty(output))
+            if (string.IsNullOrEmpty(this.make))
             {
-                output = error;
+                driver.Options.addDefines("_WIN32");
+                driver.Options.TargetTriple = "i686-pc-win64";
             }
-            string target = Regex.Match(output, @"Target:\s*(?<target>[^\r\n]+)").Groups["target"].Value;
-            string compilerVersion = Regex.Match(output, @"gcc\s+version\s+(?<version>\S+)").Groups["version"].Value;
+            else
+            {
+                string error;
+                string output = ProcessHelper.Run(Path.Combine(Path.GetDirectoryName(this.make), "gcc"), "-v", out error);
+                if (string.IsNullOrEmpty(output))
+                {
+                    output = error;
+                }
+                string target = Regex.Match(output, @"Target:\s*(?<target>[^\r\n]+)").Groups["target"].Value;
+                string compilerVersion = Regex.Match(output, @"gcc\s+version\s+(?<version>\S+)").Groups["version"].Value;
 
-			driver.Options.addDefines("_CRTIMP=");
-            driver.Options.GeneratorKind = GeneratorKind.CSharp;
-            driver.Options.LanguageVersion = LanguageVersion.C;
-            driver.Options.NoBuiltinIncludes = true;
-            driver.Options.MicrosoftMode = false;
-            driver.Options.TargetTriple = target;
-            driver.Options.Abi = CppAbi.Itanium;
+                driver.Options.addDefines("_CRTIMP=");
+                driver.Options.GeneratorKind = GeneratorKind.CSharp;
+                driver.Options.LanguageVersion = LanguageVersion.C;
+                driver.Options.NoBuiltinIncludes = true;
+                driver.Options.MicrosoftMode = false;
+                driver.Options.TargetTriple = target;
+                driver.Options.Abi = CppAbi.Itanium;
+
+                string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include"));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++"));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++", target));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
+            }
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
             driver.Options.Verbose = true;
@@ -58,11 +78,6 @@ namespace LibGD.CLI
             driver.Options.StripLibPrefix = false;
             driver.Options.GenerateSingleCSharpFile = true;
             driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h").Where(f => Path.GetFileNameWithoutExtension(f) != "gdpp"));
-            string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include"));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++"));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++", target));
-            driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
             driver.Options.addIncludeDirs(includeDir);
             driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
