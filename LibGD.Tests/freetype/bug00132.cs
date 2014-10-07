@@ -5,7 +5,7 @@ using System.Text;
 using LibGD;
 using NUnit.Framework;
 
-#if WITH_FREETYPE
+#if !NO_FREETYPE
 
 [TestFixture]
 public class GlobalMembersBug00132

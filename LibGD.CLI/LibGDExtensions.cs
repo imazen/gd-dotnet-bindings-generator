@@ -34,7 +34,7 @@ namespace LibGD
             return result;
         }
 
-#if WITH_TIFF
+#if !NO_TIFF
 
         public static gdImageStruct gdImageCreateFromTiff(byte[] bytes)
         {
@@ -112,7 +112,7 @@ namespace LibGD
             return result;
         }
 
-#if WITH_TIFF
+#if !NO_TIFF
 
         public static gdImageStruct gdImageCreateFromTiff(string file)
         {
@@ -271,7 +271,7 @@ namespace LibGD
             }
         }
 
-#if WITH_TIFF
+#if !NO_TIFF
 
         public static void gdImageTiff(gdImageStruct im, string outFile)
         {

@@ -1,7 +1,7 @@
 using LibGD;
 using NUnit.Framework;
 
-#if WITH_TIFF
+#if !NO_TIFF
 
 [TestFixture]
 public class GlobalMembersTiff_im2im
