@@ -1,6 +1,8 @@
 using LibGD;
 using NUnit.Framework;
 
+#if WITH_TIFF
+
 [TestFixture]
 public class GlobalMembersTiff_im2im
 {
@@ -65,3 +67,4 @@ public class GlobalMembersTiff_im2im
 	}
 }
 
+#endif

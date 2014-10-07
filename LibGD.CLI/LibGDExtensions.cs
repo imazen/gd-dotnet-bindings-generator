@@ -34,10 +34,14 @@ namespace LibGD
             return result;
         }
 
+#if WITH_TIFF
+
         public static gdImageStruct gdImageCreateFromTiff(byte[] bytes)
         {
             return ReadFromByteArray(bytes, gdImageCreateFromTiff);
         }
+
+#endif
 
         public static gdImageStruct gdImageCreateFromTga(byte[] bytes)
         {
@@ -108,10 +112,14 @@ namespace LibGD
             return result;
         }
 
+#if WITH_TIFF
+
         public static gdImageStruct gdImageCreateFromTiff(string file)
         {
             return ReadFromFile(file, gdImageCreateFromTiff);
         }
+
+#endif
 
         public static gdImageStruct gdImageCreateFromTga(string file)
         {
@@ -263,6 +271,8 @@ namespace LibGD
             }
         }
 
+#if WITH_TIFF
+
         public static void gdImageTiff(gdImageStruct im, string outFile)
         {
             var fp = C.fopen(outFile, "wb");
@@ -275,5 +285,8 @@ namespace LibGD
                 C.fclose(fp);
             }
         }
+
+#endif
+
     }
 }
