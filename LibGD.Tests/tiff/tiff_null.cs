@@ -1,6 +1,8 @@
 using LibGD;
 using NUnit.Framework;
 
+#if !NO_TIFF
+
 [TestFixture]
 public class GlobalMembersTiff_null
 {
@@ -19,3 +21,4 @@ public class GlobalMembersTiff_null
 	}
 }
 
+#endif
