@@ -13,7 +13,7 @@ namespace LibGD.CLI
                 Console.WriteLine("Usage: LibGD.CLI.exe [include_dir_of_libd] [GCC/MinGW_make_exe (optional) - skip for VC++] [library(.dll)_file]");
                 return;
             }
-            LibGDSharp libGdSharp = null;
+            LibGDSharp libGdSharp;
             switch (args.Length)
             {
                 case 2:

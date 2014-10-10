@@ -100,16 +100,14 @@ namespace LibGD
         public static gdImageStruct gdImageCreateFromJpegEx(string file, int ignore_warning)
         {
             IntPtr fd = C.fopen(file, "rb");
-            gdImageStruct result;
             try
             {
-                result = gdImageCreateFromJpegEx(fd, ignore_warning);
+                return gdImageCreateFromJpegEx(fd, ignore_warning);
             }
             finally
             {
                 C.fclose(fd);
             }
-            return result;
         }
 
 #if !NO_TIFF
@@ -144,16 +142,14 @@ namespace LibGD
         public static gdImageStruct gdImageCreateFromGd2Part(string file, int srcx, int srcy, int w, int h)
         {
             IntPtr fd = C.fopen(file, "rb");
-            gdImageStruct result;
             try
             {
-                result = gdImageCreateFromGd2Part(fd, srcx, srcy, w, h);
+                return gdImageCreateFromGd2Part(fd, srcx, srcy, w, h);
             }
             finally
             {
                 C.fclose(fd);
             }
-            return result;
         }
 
         public static gdImageStruct gdImageCreateFromXbm(string file)
@@ -161,35 +157,136 @@ namespace LibGD
             return ReadFromFile(file, gdImageCreateFromXbm);
         }
 
-        private static gdImageStruct ReadFromByteArray(byte[] bytes, Func<IntPtr, gdImageStruct> function)
+        public static gdImageStruct gdImageCreateFromPng(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromPng);
+        }
+
+        public static gdImageStruct gdImageCreateFromGif(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromGif);
+        }
+
+        public static gdImageStruct gdImageCreateFromWBMP(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromWBMP);
+        }
+
+        public static gdImageStruct gdImageCreateFromJpeg(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromJpeg);
+        }
+
+        public static gdImageStruct gdImageCreateFromJpegEx(Stream stream, int ignore_warning)
         {
             string temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, bytes);
-            gdImageStruct result;
             try
             {
-                result = ReadFromFile(temp, function);
+                using (var output = File.OpenWrite(temp))
+                {
+                    stream.CopyTo(output);
+                }
+                return gdImageCreateFromJpegEx(temp, ignore_warning);
             }
             finally
             {
                 File.Delete(temp);
             }
-            return result;
+        }
+
+#if !NO_TIFF
+
+        public static gdImageStruct gdImageCreateFromTiff(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromTiff);
+        }
+
+#endif
+
+        public static gdImageStruct gdImageCreateFromTga(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromTga);
+        }
+
+        public static gdImageStruct gdImageCreateFromBmp(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromBmp);
+        }
+
+        public static gdImageStruct gdImageCreateFromGd(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromGd);
+        }
+
+        public static gdImageStruct gdImageCreateFromGd2(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromGd2);
+        }
+
+        public static gdImageStruct gdImageCreateFromGd2Part(Stream stream, int srcx, int srcy, int w, int h)
+        {
+            string temp = Path.GetTempFileName();
+            try
+            {
+                using (var output = File.OpenWrite(temp))
+                {
+                    stream.CopyTo(output);
+                }
+                return gdImageCreateFromGd2Part(temp, srcx, srcy, w, h);
+            }
+            finally
+            {
+                File.Delete(temp);
+            }
+        }
+
+        public static gdImageStruct gdImageCreateFromXbm(Stream stream)
+        {
+            return ReadFromStream(stream, gdImageCreateFromXbm);
+        }
+
+        private static gdImageStruct ReadFromByteArray(byte[] bytes, Func<IntPtr, gdImageStruct> function)
+        {
+            string temp = Path.GetTempFileName();
+            File.WriteAllBytes(temp, bytes);
+            try
+            {
+                return ReadFromFile(temp, function);
+            }
+            finally
+            {
+                File.Delete(temp);
+            }
         }
 
         private static gdImageStruct ReadFromFile(string file, Func<IntPtr, gdImageStruct> function)
         {
             IntPtr fd = C.fopen(file, "rb");
-            gdImageStruct result;
             try
             {
-                result = function(fd);
+                return function(fd);
             }
             finally
             {
                 C.fclose(fd);
             }
-            return result;
+        }
+
+        private static gdImageStruct ReadFromStream(Stream stream, Func<IntPtr, gdImageStruct> function)
+        {
+            string temp = Path.GetTempFileName();
+            try
+            {
+                using (var output = File.OpenWrite(temp))
+                {
+                    stream.CopyTo(output);
+                }
+                return ReadFromFile(temp, gdImageCreateFromPng);
+            }
+            finally
+            {
+                File.Delete(temp);
+            }
         }
 
 
@@ -287,6 +384,5 @@ namespace LibGD
         }
 
 #endif
-
     }
 }
