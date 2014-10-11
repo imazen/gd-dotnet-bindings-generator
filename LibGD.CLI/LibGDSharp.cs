@@ -42,7 +42,10 @@ namespace LibGD.CLI
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(this.make))
             {
+                driver.Options.addDefines("_MSC_VER=1200");
                 driver.Options.addDefines("_WIN32");
+                driver.Options.addDefines("_M_X64");
+                driver.Options.addDefines("_XKEYCHECK_H");
                 driver.Options.TargetTriple = "i686-pc-win64";
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
             }
@@ -58,8 +61,6 @@ namespace LibGD.CLI
                 string compilerVersion = Regex.Match(output, @"gcc\s+version\s+(?<version>\S+)").Groups["version"].Value;
 
                 driver.Options.addDefines("_CRTIMP=");
-                driver.Options.GeneratorKind = GeneratorKind.CSharp;
-                driver.Options.LanguageVersion = LanguageVersion.C;
                 driver.Options.NoBuiltinIncludes = true;
                 driver.Options.MicrosoftMode = false;
                 driver.Options.TargetTriple = target;
@@ -72,6 +73,7 @@ namespace LibGD.CLI
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
             }
+            driver.Options.GeneratorKind = GeneratorKind.CSharp;
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
             driver.Options.Verbose = true;
