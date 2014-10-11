@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGD.CLI", "LibGD.CLI\LibG
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibGD.Tests", "LibGD.Tests\LibGD.Tests.csproj", "{6FDDF983-054E-4018-B243-FD9CF2943845}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libgd", "..\gd-libgd\build\src\libgd.vcxproj", "{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,30 @@ Global
 		{6FDDF983-054E-4018-B243-FD9CF2943845}.RelWithDebInfo|x64.ActiveCfg = Release|Any CPU
 		{6FDDF983-054E-4018-B243-FD9CF2943845}.RelWithDebInfo|x86.ActiveCfg = Release|x86
 		{6FDDF983-054E-4018-B243-FD9CF2943845}.RelWithDebInfo|x86.Build.0 = Release|x86
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|x64.ActiveCfg = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|x64.Build.0 = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Debug|x86.ActiveCfg = Debug|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|Any CPU.ActiveCfg = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|Mixed Platforms.ActiveCfg = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|Mixed Platforms.Build.0 = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|x64.ActiveCfg = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|x64.Build.0 = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.MinSizeRel|x86.ActiveCfg = MinSizeRel|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|Any CPU.ActiveCfg = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|Mixed Platforms.ActiveCfg = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|Mixed Platforms.Build.0 = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|x64.ActiveCfg = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|x64.Build.0 = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.Release|x86.ActiveCfg = Release|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|Any CPU.ActiveCfg = RelWithDebInfo|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|Mixed Platforms.ActiveCfg = RelWithDebInfo|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|Mixed Platforms.Build.0 = RelWithDebInfo|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{E4ADAE71-D0AC-4DA0-8BB7-464EE67676A1}.RelWithDebInfo|x86.ActiveCfg = RelWithDebInfo|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -39,10 +39,12 @@ namespace LibGD.CLI
 
         public void Setup(Driver driver)
         {
+            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(this.make))
             {
                 driver.Options.addDefines("_WIN32");
                 driver.Options.TargetTriple = "i686-pc-win64";
+                driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
             }
             else
             {
@@ -68,6 +70,7 @@ namespace LibGD.CLI
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++"));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++", target));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
+                driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
             }
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
@@ -81,8 +84,6 @@ namespace LibGD.CLI
             driver.Options.addIncludeDirs(includeDir);
             driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
-            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
             driver.Options.CodeFiles.Add(Path.Combine(dir, "LibGDExtensions.cs"));
         }
 

@@ -99,14 +99,14 @@ namespace LibGD
 
         public static gdImageStruct gdImageCreateFromJpegEx(string file, int ignore_warning)
         {
-            IntPtr fd = C.fopen(file, "rb");
+            IntPtr fd = C.fopen(file ?? string.Empty, "rb");
             try
             {
                 return gdImageCreateFromJpegEx(fd, ignore_warning);
             }
             finally
             {
-                C.fclose(fd);
+                Close(fd);
             }
         }
 
@@ -141,14 +141,14 @@ namespace LibGD
 
         public static gdImageStruct gdImageCreateFromGd2Part(string file, int srcx, int srcy, int w, int h)
         {
-            IntPtr fd = C.fopen(file, "rb");
+            IntPtr fd = C.fopen(file ?? string.Empty, "rb");
             try
             {
                 return gdImageCreateFromGd2Part(fd, srcx, srcy, w, h);
             }
             finally
             {
-                C.fclose(fd);
+                Close(fd);
             }
         }
 
@@ -261,14 +261,14 @@ namespace LibGD
 
         private static gdImageStruct ReadFromFile(string file, Func<IntPtr, gdImageStruct> function)
         {
-            IntPtr fd = C.fopen(file, "rb");
+            IntPtr fd = C.fopen(file ?? string.Empty, "rb");
             try
             {
                 return function(fd);
             }
             finally
             {
-                C.fclose(fd);
+                Close(fd);
             }
         }
 
@@ -292,79 +292,79 @@ namespace LibGD
 
         public static void gdImageBmp(gdImageStruct im, string outFile, int compression)
         {
-            var fp = C.fopen(outFile, "wb");
+            var fp = C.fopen(outFile ?? string.Empty, "wb");
             try
             {
                 gd.gdImageBmp(im, fp, 1);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
         public static void gdImageGd(gdImageStruct im, string outFile)
         {
-            var fp = C.fopen(outFile, "wb");
+            var fp = C.fopen(outFile ?? string.Empty, "wb");
             try
             {
                 gd.gdImageGd(im, fp);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
         public static void gdImageGd2(gdImageStruct im, string @out, int cs, int fmt)
         {
-            var fp = C.fopen(@out, "wb");
+            var fp = C.fopen(@out ?? string.Empty, "wb");
             try
             {
                 gd.gdImageGd2(im, fp, cs, fmt);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
         public static void gdImagePng(gdImageStruct im, string outFile)
         {
-            var fp = C.fopen(outFile, "wb");
+            var fp = C.fopen(outFile ?? string.Empty, "wb");
             try
             {
                 gd.gdImagePng(im, fp);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
         public static void gdImageJpeg(gdImageStruct im, string @out, int quality)
         {
-            var fp = C.fopen(@out, "wb");
+            var fp = C.fopen(@out ?? string.Empty, "wb");
             try
             {
                 gd.gdImageJpeg(im, fp, quality);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
         public static void gdImageGif(gdImageStruct im, string outFile)
         {
-            var fp = C.fopen(outFile, "wb");
+            var fp = C.fopen(outFile ?? string.Empty, "wb");
             try
             {
                 gd.gdImageGif(im, fp);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
@@ -372,17 +372,25 @@ namespace LibGD
 
         public static void gdImageTiff(gdImageStruct im, string outFile)
         {
-            var fp = C.fopen(outFile, "wb");
+            var fp = C.fopen(outFile ?? string.Empty, "wb");
             try
             {
                 gd.gdImageTiff(im, fp);
             }
             finally
             {
-                C.fclose(fp);
+                Close(fp);
             }
         }
 
 #endif
+
+        private static void Close(IntPtr fp)
+        {
+            if (fp != IntPtr.Zero)
+            {
+                C.fclose(fp);
+            }
+        }
     }
 }

@@ -5,7 +5,7 @@ using NUnit.Framework;
 public class GlobalMembersBug00002_4
 {
     [Test]
-    public void Main()
+    public void TestBug00002_4()
 	{
 		gdImageStruct im;
 		int red;
