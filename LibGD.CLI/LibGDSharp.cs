@@ -5,7 +5,6 @@ using System.Text.RegularExpressions;
 using CppSharp;
 using CppSharp.AST;
 using CppSharp.Generators;
-using CppSharp.Parser;
 using CppAbi = CppSharp.Parser.AST.CppAbi;
 
 namespace LibGD.CLI
@@ -46,7 +45,7 @@ namespace LibGD.CLI
                 driver.Options.addDefines("_WIN32");
                 driver.Options.addDefines("_M_X64");
                 driver.Options.addDefines("_XKEYCHECK_H");
-                driver.Options.TargetTriple = "i686-pc-win64";
+                driver.Options.TargetTriple = "amd64-pc-windows";
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
             }
             else
