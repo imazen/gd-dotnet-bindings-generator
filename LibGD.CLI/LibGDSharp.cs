@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using CppSharp;
 using CppSharp.AST;
 using CppSharp.Generators;
+using CppSharp.Parser;
+using ClangParser = CppSharp.Parser.ClangParser;
 using CppAbi = CppSharp.Parser.AST.CppAbi;
 
 namespace LibGD.CLI
@@ -41,8 +43,16 @@ namespace LibGD.CLI
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(this.make))
             {
+                var parserOptions = new ParserOptions();
+                parserOptions.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
+                parserOptions.FileName = Path.GetFileName(this.libraryFile);
+                var parserResult = ClangParser.ParseLibrary(parserOptions);
+                if (parserResult.Kind == ParserResultKind.Success)
+                {
+                    var nativeLibrary = CppSharp.ClangParser.ConvertLibrary(parserResult.Library);
+                    driver.Options.TargetTriple = nativeLibrary.ArchType == ArchType.x86 ? "i386-pc-windows" : "amd64-pc-windows";
+                }
                 driver.Options.addDefines("_XKEYCHECK_H");
-                driver.Options.TargetTriple = "amd64-pc-windows";
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
             }
             else
