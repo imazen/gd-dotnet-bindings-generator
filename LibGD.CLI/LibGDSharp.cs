@@ -41,9 +41,6 @@ namespace LibGD.CLI
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             if (string.IsNullOrEmpty(this.make))
             {
-                driver.Options.addDefines("_MSC_VER=1200");
-                driver.Options.addDefines("_WIN32");
-                driver.Options.addDefines("_M_X64");
                 driver.Options.addDefines("_XKEYCHECK_H");
                 driver.Options.TargetTriple = "amd64-pc-windows";
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
