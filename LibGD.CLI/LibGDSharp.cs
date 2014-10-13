@@ -73,6 +73,8 @@ namespace LibGD.CLI
                 driver.Options.Abi = CppAbi.Itanium;
 
                 string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "include", "c++", compilerVersion));
+                driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "include", "c++", compilerVersion, target));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include"));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++"));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, target, "include", "c++", target));
