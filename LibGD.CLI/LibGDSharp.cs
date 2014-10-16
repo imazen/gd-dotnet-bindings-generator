@@ -90,7 +90,7 @@ namespace LibGD.CLI
             driver.Options.CheckSymbols = true;
             driver.Options.StripLibPrefix = false;
             driver.Options.GenerateSingleCSharpFile = true;
-            driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h").Where(f => Path.GetFileNameWithoutExtension(f) != "gdpp"));
+            driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h"));
             driver.Options.addIncludeDirs(includeDir);
             driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));
