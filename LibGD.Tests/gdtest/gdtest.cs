@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using LibGD;
+using LibGD.GD;
 
 public static class GlobalMembersGdtest
 {
@@ -97,6 +98,17 @@ public static class GlobalMembersGdtest
 	    image = gd.gdImageCreateFromPng(filename);
 		return image;
 	}
+
+    /* Internal versions of assert functions -- use the public versions */
+    public static Image TestImageFromPng(string filename)
+    {
+        var image = new Image();
+        if (!image.CreateFromPng(filename))
+        {
+            return null;
+        }
+        return image;
+    }
 
 /* Compare two buffers, returning the number of pixels that are
  * different and the maximum difference of any single color channel in
@@ -203,6 +215,103 @@ public static class GlobalMembersGdtest
 		}
 	}
 
+    public static void TestImageDiff(Image buf_a, Image buf_b, Image buf_diff, CuTestImageResult result_ret)
+    {
+        int x;
+        int y;
+        int c1;
+        int c2;
+
+        for (y = 0; y < ((buf_a).Width()); y++)
+        {
+            for (x = 0; x < ((buf_a).Height()); x++)
+            {
+                c1 = buf_a.GetTrueColorPixel(x, y);
+                c2 = buf_b.GetTrueColorPixel(x, y);
+
+                /* check if the pixels are the same */
+                if (c1 != c2)
+                {
+                    int r1;
+                    int b1;
+                    int g1;
+                    int a1;
+                    int r2;
+                    int b2;
+                    int g2;
+                    int a2;
+                    uint diff_a;
+                    uint diff_r;
+                    uint diff_g;
+                    uint diff_b;
+
+                    a1 = (((c1) & 0x7F000000) >> 24);
+                    a2 = (((c2) & 0x7F000000) >> 24);
+                    diff_a = (uint) Math.Abs(a1 - a2);
+                    diff_a *= 4; // emphasize
+
+                    if (diff_a != 0)
+                    {
+                        diff_a += 128; // make sure it's visible
+                    }
+                    if (diff_a > DefineConstants.gdAlphaMax)
+                    {
+                        diff_a = DefineConstants.gdAlphaMax / 2;
+                    }
+
+                    r1 = (((c1) & 0xFF0000) >> 16);
+                    r2 = (((c2) & 0xFF0000) >> 16);
+                    diff_r = (uint) Math.Abs(r1 - r2);
+                    // diff_r *= 4;  // emphasize
+                    if (diff_r != 0)
+                    {
+                        diff_r += DefineConstants.gdRedMax / 2; // make sure it's visible
+                    }
+                    if (diff_r > 255)
+                    {
+                        diff_r = 255;
+                    }
+
+                    g1 = (((c1) & 0x00FF00) >> 8);
+                    g2 = (((c2) & 0x00FF00) >> 8);
+                    diff_g = (uint) Math.Abs(g1 - g2);
+
+                    diff_g *= 4; // emphasize
+                    if (diff_g != 0)
+                    {
+                        diff_g += DefineConstants.gdGreenMax / 2; // make sure it's visible
+                    }
+                    if (diff_g > 255)
+                    {
+                        diff_g = 255;
+                    }
+
+                    b1 = ((c1) & 0x0000FF);
+                    b2 = ((c2) & 0x0000FF);
+                    diff_b = (uint) Math.Abs(b1 - b2);
+                    diff_b *= 4; // emphasize
+                    if (diff_b != 0)
+                    {
+                        diff_b += DefineConstants.gdBlueMax / 2; // make sure it's visible
+                    }
+                    if (diff_b > 255)
+                    {
+                        diff_b = 255;
+                    }
+
+                    result_ret.pixels_changed++;
+                    if (buf_diff != null)
+                        buf_diff.SetPixel(x, y, (int) (((diff_a) << 24) + ((diff_r) << 16) + ((diff_g) << 8) + (diff_b)));
+                }
+                else
+                {
+                    if (buf_diff != null)
+                        buf_diff.SetPixel(x, y, (((0) << 24) + ((255) << 16) + ((255) << 8) + (255)));
+                }
+            }
+        }
+    }
+
 	public static int gdTestImageCompareToImage(string file, uint line, string message, gdImageStruct expected, gdImageStruct actual)
 	{
 		uint width_a;
@@ -273,6 +382,57 @@ public static class GlobalMembersGdtest
 		return 0;
 	}
 
+    public static int TestImageCompareToImage(string file, uint line, string message, Image expected, Image actual)
+    {
+        var result = new CuTestImageResult { max_diff = 0, pixels_changed = 0 };
+
+        if (actual == null)
+        {
+            gdTestErrorMsg(file, line, "Image is NULL\n");
+            return 0;
+        }
+
+        int width_a = expected.SX();
+        int height_a = expected.SY();
+        int width_b = actual.SX();
+        int height_b = actual.SY();
+
+        if (width_a != width_b || height_a != height_b)
+        {
+            gdTestErrorMsg(file, line, "Image size mismatch: (%ux%u) vs. (%ux%u)\n       for %s vs. buffer\n", width_a, height_a, width_b, height_b, file);
+            return 0;
+        }
+
+        using (var surface_diff = new Image(width_a, height_a, true))
+        {
+            TestImageDiff(expected, actual, surface_diff, result);
+            if (result.pixels_changed > 0)
+            {
+                gdTestErrorMsg(file, line, "Total pixels changed: %d with a maximum channel difference of %d.\n", result.pixels_changed, result.max_diff);
+
+                int p = file.Length;
+                p--;
+
+                /* Use only the filename (and store it in the bld dir not the src dir
+             */
+                while (p > 0 && (file[p] != '/' && file[p] != '\\'))
+                {
+                    p--;
+                }
+                string file_diff = string.Format("{0}_{1:D}_diff.png", file + p + 1, line);
+                string file_out = string.Format("{0}_{1:D}_out.png", file + p + 1, line);
+
+                surface_diff.Png(file_diff);
+                actual.Png(file_out);
+            }
+            else
+            {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
 	public static int gdTestImageCompareToFile(string file, uint line, string message, string expected_file, gdImageStruct actual)
 	{
 		gdImageStruct expected;
@@ -292,6 +452,25 @@ public static class GlobalMembersGdtest
 		}
 		return res;
 	}
+
+    public static int TestImageCompareToFile(string file, uint line, string message, string expected_file, Image actual)
+    {
+        int res;
+
+        using (var expected = TestImageFromPng(expected_file))
+        {
+            if (expected == null)
+            {
+                gdTestErrorMsg(file, line, "Cannot open PNG <%s>", expected_file);
+                res = 0;
+            }
+            else
+            {
+                res = TestImageCompareToImage(file, line, message, expected, actual);
+            }
+        }
+        return res;
+    }
 
 /* Return the largest difference between two corresponding pixels and
  * channels. */
@@ -326,6 +505,37 @@ public static class GlobalMembersGdtest
 
 		return (uint) diff;
 	}
+
+    public static uint gdMaxPixelDiff(Image a, Image b)
+    {
+        int diff = 0;
+        int x;
+        int y;
+
+        if (a == null || b == null || a.SX() != b.SX() || a.SY() != b.SY())
+            return uint.MaxValue;
+
+        for (x = 0; x < a.SX(); x++)
+        {
+            for (y = 0; y < a.SY(); y++)
+            {
+                int c1;
+                int c2;
+
+                c1 = a.GetTrueColorPixel(x, y);
+                c2 = b.GetTrueColorPixel(x, y);
+                if (c1 == c2)
+                    continue;
+
+                diff = max(diff, Math.Abs(((c1 & 0x7F000000) >> 24) - ((c2 & 0x7F000000) >> 24)));
+                diff = max(diff, Math.Abs(((c1 & 0xFF0000) >> 16) - ((c2 & 0xFF0000) >> 16)));
+                diff = max(diff, Math.Abs(((c1 & 0x00FF00) >> 8) - ((c2 & 0x00FF00) >> 8)));
+                diff = max(diff, Math.Abs((c1 & 0x0000FF) - (c2 & 0x0000FF)));
+            } // for
+        } // for
+
+        return (uint) diff;
+    }
 
 	public static int gdTestAssert(string file, uint line, string message, int condition)
 	{

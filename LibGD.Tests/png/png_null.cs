@@ -1,5 +1,5 @@
-using System;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -20,5 +20,18 @@ public class GlobalMembersPng_null
 		}
 		gd.gdImagePng(im, null); // noop safely
 	}
+
+    [Test]
+    public void TestPng_nullCpp()
+    {
+        using (var image = new Image())
+        {
+            if (image.CreateFromPng(null))
+            {
+                Assert.Fail();
+            }
+            image.Png((string) null); // noop safely
+        }
+    }
 }
 

@@ -1,5 +1,6 @@
-using System;
+using System.Net;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -20,7 +21,7 @@ public class GlobalMembersGd_im2im
 		src = gd.gdImageCreate(100, 100);
 		if (src == null)
 		{
-            Assert.Fail("could not create src\n");
+            Assert.Fail("could not create src");
 		}
 		r = gd.gdImageColorAllocate(src, 0xFF, 0, 0);
 		g = gd.gdImageColorAllocate(src, 0, 0xFF, 0);
@@ -29,18 +30,18 @@ public class GlobalMembersGd_im2im
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
 
-        OutputGd(src, "src");
-		p = gd.gdImageGdPtr(src, &size);
+        gd.gdImageGd(src, "gd_im2im_src.gd");
+        p = gd.gdImageGdPtr(src, &size);
 		if (p == null)
 		{
             gd.gdImageDestroy(src);
-            Assert.Fail("p is null\n");
+            Assert.Fail("p is null");
 		}
 		if (size <= 0)
 		{
             gd.gdFree(p);
 		    gd.gdImageDestroy(src);
-			Assert.Fail("size is non-positive\n");
+			Assert.Fail("size is non-positive");
 		}
 
 		dst = gd.gdImageCreateFromGdPtr(size, p);
@@ -48,10 +49,10 @@ public class GlobalMembersGd_im2im
 		{
             gd.gdFree(p);
             gd.gdImageDestroy(src);
-			Assert.Fail("could not create dst\n");
+			Assert.Fail("could not create dst");
 		}
-        OutputGd(dst, "dst");
-		GlobalMembersGdtest.gdTestImageDiff(src, dst, null, result);
+        gd.gdImageGd(dst, "gd_im2im_dst.gd");
+        GlobalMembersGdtest.gdTestImageDiff(src, dst, null, result);
 		if (result.pixels_changed > 0)
 		{
             gd.gdImageDestroy(dst);
@@ -64,9 +65,53 @@ public class GlobalMembersGd_im2im
         gd.gdImageDestroy(src);
 	}
 
-    private static void OutputGd(gdImageStruct input, string name)
+    [Test]
+    public unsafe void TestGd_im2imCpp()
     {
-        gd.gdImageGd(input, string.Format("gd_im2im_{0}.gd", name));
+        using (var src = new Image(100, 100))
+        {
+            if (!src.good())
+            {
+                Assert.Fail("could not create src");
+            }
+            int r = src.ColorAllocate(0xFF, 0, 0);
+            int g = src.ColorAllocate(0, 0xFF, 0);
+            int b = src.ColorAllocate(0, 0, 0xFF);
+            src.FilledRectangle(20, 20, 79, 79, r);
+            src.Rectangle(20, 20, 79, 79, g);
+            src.Ellipse(70, 25, 30, 20, b);
+
+            src.Gd("gd_im2im_src.gd");
+
+            int size = 0;
+            void* p = src.Gd(&size);
+            if (p == null)
+            {
+                Assert.Fail("p is null");
+            }
+            if (size <= 0)
+            {
+                gd.gdFree(p);
+                Assert.Fail("size is non-positive");
+            }
+            using (var dst = new Image(size, p, new Gd_tag()))
+            {
+                if (!dst.good())
+                {
+                    gd.gdFree(p);
+                    Assert.Fail("could not create dst");
+                }
+                dst.Gd("gd_im2im_dst.gd");
+                var result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
+                GlobalMembersGdtest.TestImageDiff(src, dst, null, result);
+                if (result.pixels_changed > 0)
+                {
+                    gd.gdFree(p);
+                    Assert.Fail("pixels changed: {0:D}", result.pixels_changed);
+                }
+                gd.gdFree(p);
+            }
+        }
     }
 }
 

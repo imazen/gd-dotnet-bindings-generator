@@ -32,6 +32,13 @@ namespace LibGD.CLI
 
         public void Preprocess(Driver driver, ASTContext ctx)
         {
+            ctx.SetClassAsValueType("Png_tag");
+            ctx.SetClassAsValueType("Gif_tag");
+            ctx.SetClassAsValueType("WBMP_tag");
+            ctx.SetClassAsValueType("Jpeg_tag");
+            ctx.SetClassAsValueType("Gd_tag");
+            ctx.SetClassAsValueType("Gd2_tag");
+            ctx.SetClassAsValueType("Xbm_tag");
         }
 
         public void Postprocess(Driver driver, ASTContext lib)
@@ -81,6 +88,7 @@ namespace LibGD.CLI
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "lib", "gcc", target, compilerVersion, "include"));
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
             }
+            driver.Options.addDefines("HAVE_CONFIG_H");
             driver.Options.GeneratorKind = GeneratorKind.CSharp;
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
@@ -88,6 +96,8 @@ namespace LibGD.CLI
             driver.Options.IgnoreParseWarnings = true;
             driver.Options.CompileCode = true;
             driver.Options.CheckSymbols = true;
+            driver.Options.GenerateDefaultValuesForArguments = true;
+            driver.Options.MarshalCharAsManagedChar = true;
             driver.Options.StripLibPrefix = false;
             driver.Options.GenerateSingleCSharpFile = true;
             driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h"));

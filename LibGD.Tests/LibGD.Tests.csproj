@@ -113,9 +113,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="gdtiled\bug00032.cs" />
-    <Compile Include="gd\gd_im2im.cs" />
-    <Compile Include="gd\gd_null.cs" />
-    <Compile Include="gd\gd_num_colors.cs" />
+    <Compile Include="gd\gd_im2im.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gd\gd_null.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="gd\gd_num_colors.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="gd\gd_versiontest.cs">
       <SubType>Code</SubType>
     </Compile>

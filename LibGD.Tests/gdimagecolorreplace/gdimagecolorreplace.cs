@@ -1,11 +1,60 @@
 using System;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
 public class GlobalMembersGdimagecolorreplace
 {
-	internal static int callback(IntPtr imPtr, int src)
+    [Test]
+    public void TestGdImageColorReplace()
+    {
+        gdImageStruct im;
+        int error = 0;
+
+        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+
+        /* true color */
+        im = gd.gdImageCreateTrueColor(5, 5);
+        run_tests(im, ref error);
+        gd.gdImageDestroy(im);
+
+        /* palette */
+        im = gd.gdImageCreate(5, 5);
+        run_tests(im, ref error);
+        gd.gdImageDestroy(im);
+
+        if (error != 0)
+        {
+            Assert.Fail("Error: {0}", error);
+        }
+    }
+
+    [Test]
+    public void TestGdImageColorReplaceCpp()
+    {
+        int error = 0;
+
+        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+
+        /* true color */
+        using (var image = new Image(5, 5, true))
+        {
+            run_testsCpp(image, ref error);
+        }
+
+        using (var image = new Image(5, 5))
+        {
+            run_testsCpp(image, ref error);
+        }
+
+        if (error != 0)
+        {
+            Assert.Fail("Error: {0}", error);
+        }
+    }
+
+    private static int callback(IntPtr imPtr, int src)
 	{
 		int r;
 		int g;
@@ -19,13 +68,23 @@ public class GlobalMembersGdimagecolorreplace
 		{
 			return gd.gdImageColorResolve(im, 0x0F & r, 0x0F & g, 0);
 		}
-		else
-		{
-			return -1;
-		}
+        return -1;
 	}
 
-	internal static unsafe void run_tests(gdImageStruct im, ref int error)
+    private static int callbackCpp(IntPtr imPtr, int src)
+    {
+        var image = new Image(new gdImageStruct(imPtr));
+        int r = image.IsTrueColor() ? (src & 0xFF0000) >> 16 : image.Red(src);
+        int g = image.IsTrueColor() ? (src & 0x00FF00) >> 8 : image.Green(src);
+        int b = image.IsTrueColor() ? (src & 0x0000FF) : image.Blue(src);
+        if ((b & 0xFF) != 0)
+        {
+            return image.ColorResolve(0x0F & r, 0x0F & g, 0);
+        }
+        return -1;
+    }
+
+    private static unsafe void run_tests(gdImageStruct im, ref int error)
 	{
 		int black;
 		int white;
@@ -111,7 +170,7 @@ public class GlobalMembersGdimagecolorreplace
 	    CheckValue(n, -1);
 
 		gd.gdImageSetClip(im, 1, 1, 4, 4);
-		n = gd.gdImageColorReplaceCallback(im, GlobalMembersGdimagecolorreplace.callback);
+		n = gd.gdImageColorReplaceCallback(im, callback);
 	    CheckValue(n, 16);
 	    CheckPixel(im, 0, 0, c);
 	    CheckPixel(im, 0, 4, white);
@@ -140,29 +199,124 @@ public class GlobalMembersGdimagecolorreplace
 	    CheckPixel(im, 3, 3, yellow);
 	}
 
-    [Test]
-    public void TestGdImageColorReplace()
-	{
-		gdImageStruct im;
-		int error = 0;
+    private static unsafe void run_testsCpp(Image image, ref int error)
+    {
+        int black;
+        int white;
+        int cosmic_latte;
+        int cream;
+        int ivory;
+        int magnolia;
+        int old_lace;
+        int seashell;
+        int yellow;
+        int c;
+        int d;
+        int[] src = new int[2];
+        int[] dst = new int[2];
+        int n;
 
-        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+        black = image.ColorAllocate(0, 0, 0, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        white = image.ColorAllocate(0xFF, 0xFF, 0xFF, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        cosmic_latte = image.ColorAllocate(0xFF, 0xF8, 0xE7, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        cream = image.ColorAllocate(0xFF, 0xFD, 0xD0, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        ivory = image.ColorAllocate(0xFF, 0xFF, 0xF0, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        magnolia = image.ColorAllocate(0xF8, 0xF4, 0xFF, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        old_lace = image.ColorAllocate(0xFD, 0xF5, 0xE6, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        seashell = image.ColorAllocate(0xFF, 0xF5, 0xEE, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
+        yellow = image.ColorAllocate(0xFF, 0xFF, 0, GlobalMembersGdtest.DefineConstants.gdAlphaOpaque);
 
-		/* true color */
-		im = gd.gdImageCreateTrueColor(5, 5);
-		run_tests(im, ref error);
-		gd.gdImageDestroy(im);
+        c = image.ColorAllocate(0xFF, 0, 0xFF);
+        image.FilledRectangle(0, 0, 4, 4, white);
+        image.FilledRectangle(0, 0, 3, 3, black);
+        // this function is not exposed in the C++ wrapper
+        n = gd.gdImageColorReplace(image.GetPtr(), white, c);
 
-		/* palette */
-		im = gd.gdImageCreate(5, 5);
-		run_tests(im, ref error);
-		gd.gdImageDestroy(im);
+        CheckValue(n, 9);
+        CheckPixel(image, 0, 0, black);
+        CheckPixel(image, 2, 3, black);
+        CheckPixel(image, 4, 4, c);
 
-        if (error != 0)
+        image.SetClip(1, 1, 3, 3);
+        n = gd.gdImageColorReplace(image.GetPtr(), black, c);
+        CheckValue(n, 9);
+        CheckPixel(image, 0, 0, black);
+        CheckPixel(image, 2, 3, c);
+
+        src[0] = black;
+        src[1] = c;
+        dst[0] = c;
+        dst[1] = white;
+        image.SetClip(0, 0, 4, 4);
+        fixed (int* srcPtr = src)
         {
-            Assert.Fail("Error: {0}", error);
+            fixed (int* dstPtr = dst)
+            {
+                // this function is not exposed in the C++ wrapper
+                n = gd.gdImageColorReplaceArray(image.GetPtr(), 2, srcPtr, dstPtr);
+            }
         }
-	}
+        CheckValue(n, 25);
+        CheckPixel(image, 0, 0, c);
+        CheckPixel(image, 2, 3, white);
+        CheckPixel(image, 4, 4, white);
+
+        fixed (int* srcPtr = src)
+        {
+            fixed (int* dstPtr = dst)
+            {
+                n = gd.gdImageColorReplaceArray(image.GetPtr(), 0, srcPtr, dstPtr);
+            }
+        }
+        CheckValue(n, 0);
+        fixed (int* srcPtr = src)
+        {
+            fixed (int* dstPtr = dst)
+            {
+                n = gd.gdImageColorReplaceArray(image.GetPtr(), -1, srcPtr, dstPtr);
+            }
+        }
+        CheckValue(n, 0);
+        fixed (int* srcPtr = src)
+        {
+            fixed (int* dstPtr = dst)
+            {
+                n = gd.gdImageColorReplaceArray(image.GetPtr(), int.MaxValue, srcPtr, dstPtr);
+            }
+        }
+        CheckValue(n, -1);
+
+        image.SetClip(1, 1, 4, 4);
+        // this function is not exposed in the C++ wrapper
+        n = gd.gdImageColorReplaceCallback(image.GetPtr(), callbackCpp);
+        CheckValue(n, 16);
+        CheckPixel(image, 0, 0, c);
+        CheckPixel(image, 0, 4, white);
+        d = image.ColorExact(0x0F, 0x0F, 0);
+        if (GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", (d > 0) ? 1 : 0) != 1)
+        {
+            error = -1;
+        }
+        CheckPixel(image, 2, 3, d);
+        CheckPixel(image, 4, 4, d);
+
+        image.SetClip(0, 0, 4, 4);
+        image.FilledRectangle(0, 0, 4, 4, black);
+        image.FilledRectangle(1, 1, 3, 3, white);
+        image.SetPixel(1, 1, cosmic_latte);
+        image.SetPixel(1, 2, cream);
+        image.SetPixel(2, 1, ivory);
+        image.SetPixel(2, 2, magnolia);
+        image.SetPixel(3, 1, old_lace);
+        image.SetPixel(3, 2, seashell);
+        // this function is not exposed in the C++ wrapper
+        n = gd.gdImageColorReplaceThreshold(image.GetPtr(), white, yellow, 2);
+        CheckValue(n, 9);
+        CheckPixel(image, 0, 0, black);
+        CheckPixel(image, 1, 1, yellow);
+        CheckPixel(image, 2, 2, yellow);
+        CheckPixel(image, 3, 3, yellow);
+    }
 
     private static void CheckValue(int n, int expected)
     {
@@ -182,6 +336,20 @@ public class GlobalMembersGdimagecolorreplace
         {
             gd.gdImageSetClip(im, 0, 0, 4, 4);
             var c = gd.gdImageGetPixel(im, x, y);
+            if (GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__,
+                                                 "assert failed in <%s:%i>\n", (c == (expected)) ? 1 : 0) != 1)
+            {
+                Assert.Fail("{0:D} is expected, but {1:D}\n", expected, c);
+            }
+        } while (false);
+    }
+
+    private static void CheckPixel(Image image, int x, int y, int expected)
+    {
+        do
+        {
+            image.SetClip(0, 0, 4, 4);
+            var c = image.GetPixel(x, y);
             if (GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__,
                                                  "assert failed in <%s:%i>\n", (c == (expected)) ? 1 : 0) != 1)
             {

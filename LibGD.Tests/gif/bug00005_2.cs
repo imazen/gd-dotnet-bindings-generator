@@ -1,4 +1,5 @@
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -448,14 +449,27 @@ public class GlobalMembersBug00005_2
     [Test]
     public unsafe void TestBug00005_2()
     {
-        gdImageStruct im;
         fixed (void* gitPtr = this.gifdata)
         {
+            gdImageStruct im;
             if ((im = gd.gdImageCreateFromGifPtr(8994, gitPtr)) != null)
             {
                 gd.gdImageDestroy(im);
             }
             else
+            {
+                Assert.Fail();
+            }
+        }
+    }
+
+    [Test]
+    public unsafe void TestBug00005_2Cpp()
+    {
+        fixed (void* gitPtr = this.gifdata)
+        {
+            var image = new Image(8994, gitPtr, new Gif_tag());
+            if (!image.good())
             {
                 Assert.Fail();
             }

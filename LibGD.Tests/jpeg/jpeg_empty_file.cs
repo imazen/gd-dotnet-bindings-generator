@@ -1,5 +1,5 @@
-using System;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -8,14 +8,11 @@ public class GlobalMembersJpeg_empty_file
     [Test]
     public void TestJpeg_empty_file()
 	{
-		gdImageStruct im;
-        string path = new string(new char[1024]);
-
         //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
 
-		path = string.Format("{0}/jpeg/empty.jpeg", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+		string path = string.Format("{0}/jpeg/empty.jpeg", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 
-		im = gd.gdImageCreateFromJpeg(path);
+		gdImageStruct im = gd.gdImageCreateFromJpeg(path);
 
         if (im != null)
         {
@@ -23,5 +20,23 @@ public class GlobalMembersJpeg_empty_file
             Assert.Fail();
         }
 	}
+
+    [Test]
+    public void TestJpeg_empty_fileCpp()
+    {
+        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+
+        string path = string.Format("{0}/jpeg/empty.jpeg", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+
+        using (var image = new Image())
+        {
+            image.CreateFromJpeg(path);
+
+            if (image.good())
+            {
+                Assert.Fail();
+            }
+        }
+    }
 }
 

@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -11,10 +12,7 @@ public class GlobalMembersBug00002_1
     [Test]
     public void TestBug00002_1()
 	{
-		gdImageStruct im;
-        string path = new string(new char[1024]);
-
-		im = gd.gdImageCreateTrueColor(100, 100);
+        gdImageStruct im = gd.gdImageCreateTrueColor(100, 100);
 
 		if (im == null)
 		{
@@ -27,7 +25,7 @@ public class GlobalMembersBug00002_1
 
         gd.gdImagePng(im, TMP_FN);
 
-		path = string.Format("{0}/gdimagefill/bug00002_1_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+		string path = string.Format("{0}/gdimagefill/bug00002_1_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)
 		{
 			gd.gdImageDestroy(im);
@@ -38,5 +36,31 @@ public class GlobalMembersBug00002_1
 
         File.Delete(TMP_FN);
 	}
+
+    [Test]
+    public void TestBug00002_1Cpp()
+    {
+        using (var image = new Image(100, 100, true))
+        {
+            if (!image.good())
+            {
+                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "Cannot create image.");
+                Assert.Fail();
+            }
+
+            image.Fill(0, 0, 0xffffff);
+            image.Fill(0, 0, 0xffffff);
+
+            image.Png(TMP_FN);
+
+            string path = string.Format("{0}/gdimagefill/bug00002_1_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+            if (GlobalMembersGdtest.TestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, path, image) == 0)
+            {
+                Assert.Fail();
+            }
+        }
+
+        File.Delete(TMP_FN);
+    }
 }
 

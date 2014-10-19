@@ -1,5 +1,6 @@
 using System;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -11,16 +12,12 @@ public class GlobalMembersBug00227
     public const int PROBE_SIZE = 11;
 
     [Test]
-	public void Main()
+    public void TestBug00227()
 	{
-		IntPtr fp;
-		gdImageStruct im0;
-		gdImageStruct im1;
-		gdImageStruct im2;
-		int i;
+        int i;
 
 		/* generate a GIF animation */
-		im0 = gd.gdImageCreate(WIDTH, HEIGHT);
+		gdImageStruct im0 = gd.gdImageCreate(WIDTH, HEIGHT);
 		if (im0 == null)
 			Assert.Fail();
 		for (i = 0; i < WIDTH; i++)
@@ -29,7 +26,7 @@ public class GlobalMembersBug00227
 			gd.gdImageSetPixel(im0, i, 0, c);
 		}
 
-		fp = C.fopen("bug00227.gif", "wb");
+		IntPtr fp = C.fopen("bug00227.gif", "wb");
 		if (fp == null)
 			Assert.Fail();
 
@@ -37,7 +34,7 @@ public class GlobalMembersBug00227
 
 		gd.gdImageGifAnimAdd(im0, fp, 1, 0, 0, DELAY, 1, null);
 
-		im1 = gd.gdImageCreate(WIDTH, HEIGHT);
+		gdImageStruct im1 = gd.gdImageCreate(WIDTH, HEIGHT);
 		if (im1 == null)
 			Assert.Fail();
 		for (i = 0; i < WIDTH; i++)
@@ -47,7 +44,7 @@ public class GlobalMembersBug00227
 		}
 		gd.gdImageGifAnimAdd(im1, fp, 1, 0, 0, DELAY, 1, im0);
 
-		im2 = gd.gdImageCreate(WIDTH, HEIGHT);
+		gdImageStruct im2 = gd.gdImageCreate(WIDTH, HEIGHT);
 		if (im2 == null)
 			Assert.Fail();
 		for (i = 0; i < WIDTH; i++)
@@ -80,5 +77,74 @@ public class GlobalMembersBug00227
         //fclose(fp);
         //return 0;
 	}
+
+    [Test]
+    public void TestBug00227Cpp()
+    {
+        int i;
+
+        /* generate a GIF animation */
+        using (var image0 = new Image(WIDTH, HEIGHT))
+        {
+            if (!image0.good())
+                Assert.Fail();
+            for (i = 0; i < WIDTH; i++)
+            {
+                int c = image0.ColorAllocate(i, 0xff, 0xff);
+                image0.SetPixel(i, 0, c);
+            }
+
+            IntPtr fp = C.fopen("bug00227.gif", "wb");
+            if (fp == IntPtr.Zero)
+                Assert.Fail();
+
+            image0.GifAnimBegin(fp, 0, 0);
+
+            image0.GifAnimAdd(fp, 1, 0, 0, DELAY, 1, (gdImageStruct) null);
+
+            using (var image1 = new Image(WIDTH, HEIGHT))
+            {
+                if (!image1.good())
+                    Assert.Fail();
+                for (i = 0; i < WIDTH; i++)
+                {
+                    int c = image1.ColorAllocate(i, 0x00, 0xff);
+                    image1.SetPixel(i, 0, c);
+                }
+                image1.GifAnimAdd(fp, 1, 0, 0, DELAY, 1, image0);
+
+                using (var image2 = new Image(WIDTH, HEIGHT))
+                {
+                    if (!image2.good())
+                        Assert.Fail();
+                    for (i = 0; i < WIDTH; i++)
+                    {
+                        int c = image2.ColorAllocate(i, 0xff, 0x00);
+                        image2.SetPixel(i, 0, c);
+                    }
+                    image2.GifAnimAdd(fp, 1, 0, 0, DELAY, 1, image1);
+
+                    gd.gdImageGifAnimEnd(fp);
+
+                    C.fclose(fp);
+                }
+            }
+        }
+
+        /* check the Global Color Table flag */
+        //fp = fopen("bug00227.gif", "rb");
+        //if (fp == null)
+        //    return 1;
+        //buf = malloc(DefineConstants.PROBE_SIZE);
+        //if (buf == 0)
+        //    return 1;
+        //if (DefineConstants.PROBE_SIZE != fread(buf, 1, DefineConstants.PROBE_SIZE, fp))
+        //    return 1;
+        //if (buf[DefineConstants.PROBE_SIZE-1] & 0x80)
+        //    return 1;
+        //free(buf);
+        //fclose(fp);
+        //return 0;
+    }
 }
 

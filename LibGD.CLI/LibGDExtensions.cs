@@ -393,4 +393,110 @@ namespace LibGD
             }
         }
     }
+
+    namespace GD
+    {
+        public unsafe partial class Image
+        {
+            public void Gd(string @out)
+            {
+                SaveToFile(@out, Gd);
+            }
+
+            public void Gd2(string @out, int cs, int fmt)
+            {
+                var fp = C.fopen(@out ?? string.Empty, "wb");
+                try
+                {
+                    Gd2(fp, cs, fmt);
+                }
+                finally
+                {
+                    Close(fp);
+                }
+            }
+
+            public bool CreateFromGd(string @in)
+            {
+                return CreateFromFile(@in, CreateFromGd);
+            }
+
+            public bool CreateFromGd2(string @in)
+            {
+                return CreateFromFile(@in, CreateFromGd2);
+            }
+
+            public bool CreateFromPng(string @in)
+            {
+                return CreateFromFile(@in, CreateFromPng);
+            }
+
+            public bool CreateFromJpeg(string @in)
+            {
+                return CreateFromFile(@in, CreateFromJpeg);
+            }
+
+            public bool CreateFromGif(string @in)
+            {
+                return CreateFromFile(@in, CreateFromGif);
+            }
+
+            public void Png(string @out)
+            {
+                SaveToFile(@out, Png);
+            }
+
+            public void Jpeg(string @out, int quality = -1)
+            {
+                var fp = C.fopen(@out ?? string.Empty, "wb");
+                try
+                {
+                    Jpeg(fp, quality);
+                }
+                finally
+                {
+                    Close(fp);
+                }
+            }
+
+            public void Gif(string @out)
+            {
+                SaveToFile(@out, Gif);
+            }
+
+            private static bool CreateFromFile(string @in, Func<IntPtr, bool> func)
+            {
+                var fp = C.fopen(@in ?? string.Empty, "rb");
+                try
+                {
+                    return func(fp);
+                }
+                finally
+                {
+                    Close(fp);
+                }
+            }
+
+            private static void SaveToFile(string @out, Action<IntPtr> action)
+            {
+                var fp = C.fopen(@out ?? string.Empty, "wb");
+                try
+                {
+                    action(fp);
+                }
+                finally
+                {
+                    Close(fp);
+                }
+            }
+
+            private static void Close(IntPtr fp)
+            {
+                if (fp != IntPtr.Zero)
+                {
+                    C.fclose(fp);
+                }
+            }
+        }
+    }
 }

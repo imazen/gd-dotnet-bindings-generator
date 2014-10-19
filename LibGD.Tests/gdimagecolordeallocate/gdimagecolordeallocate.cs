@@ -1,4 +1,5 @@
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -7,12 +8,9 @@ public class GlobalMembersGdimagecolordeallocate
     [Test]
     public void TestGdImageColorDeallocate()
 	{
-		gdImageStruct im;
-		int c;
-
-		im = gd.gdImageCreate(1, 1);
+        gdImageStruct im = gd.gdImageCreate(1, 1);
 		/* test for deallocating a color */
-		c = gd.gdImageColorAllocate(im, 255, 255, 255);
+		int c = gd.gdImageColorAllocate(im, 255, 255, 255);
 		if (c < 0)
 		{
 			gd.gdImageDestroy(im);
@@ -30,5 +28,27 @@ public class GlobalMembersGdimagecolordeallocate
 		gd.gdImageColorDeallocate(im, -1);
 		gd.gdImageDestroy(im);
 	}
+
+    [Test]
+    public void TestGdImageColorDeallocateCpp()
+    {
+        using (var image = new Image(1, 1))
+        {
+            int c = image.ColorAllocate(255, 255, 255);
+            if (c < 0)
+            {
+                Assert.Fail();
+            }
+            image.ColorDeallocate(c);
+            if (image.GetPtr().open[c] == 0)
+            {
+                Assert.Fail();
+            }
+
+            /* just see whether it is OK with out-of-bounds values */
+            image.ColorDeallocate(GlobalMembersGdtest.DefineConstants.gdMaxColors);
+            image.ColorDeallocate(-1);
+        }
+    }
 }
 

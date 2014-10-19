@@ -1,5 +1,5 @@
-using System;
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -8,9 +8,7 @@ public class GlobalMembersJpeg_null
     [Test]
     public void TestJpeg_null()
 	{
-		gdImageStruct im;
-
-        im = gd.gdImageCreateFromJpeg((string) null);
+        gdImageStruct im = gd.gdImageCreateFromJpeg((string) null);
 		if (im != null)
 		{
 			gd.gdImageDestroy(im);
@@ -18,5 +16,17 @@ public class GlobalMembersJpeg_null
 		}
         gd.gdImageJpeg(im, null, 100); // noop safely
 	}
+
+    [Test]
+    public void TestJpeg_nullCpp()
+    {
+        var image = new Image();
+        image.CreateFromJpeg(null);
+        if (image.good())
+        {
+            Assert.Fail();
+        }
+        image.Jpeg((string) null, 100); // noop safely
+    }
 }
 

@@ -1,4 +1,5 @@
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -7,16 +8,32 @@ public class GlobalMembersBug00086
     [Test]
     public unsafe void TestBug00086()
     {
-        gdImageStruct im;
-
         //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
 
         fixed (void* pngPtr = this.pngdata)
         {
+            gdImageStruct im;
             if ((im = gd.gdImageCreateFromPngPtr(93, pngPtr)) != null)
             {
                 gd.gdImageDestroy(im);
                 Assert.Fail();
+            }
+        }
+    }
+
+    [Test]
+    public unsafe void TestBug00086Cpp()
+    {
+        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+
+        fixed (void* pngPtr = this.pngdata)
+        {
+            using (var image = new Image())
+            {
+                if (image.CreateFromPng(93, pngPtr))
+                {
+                    Assert.Fail();
+                }
             }
         }
     }

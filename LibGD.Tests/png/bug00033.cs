@@ -1,4 +1,5 @@
 using LibGD;
+using LibGD.GD;
 using NUnit.Framework;
 
 [TestFixture]
@@ -7,14 +8,11 @@ public class GlobalMembersBug00033
     [Test]
     public void TestBug00033()
 	{
-		gdImageStruct im;
-        string path = new string(new char[1024]);
-
         //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
 
-		path = string.Format("{0}/png/bug00033.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+		string path = string.Format("{0}/png/bug00033.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
 
-        im = gd.gdImageCreateFromPng(path);
+        gdImageStruct im = gd.gdImageCreateFromPng(path);
 
 		if (im != null)
 		{
@@ -22,5 +20,19 @@ public class GlobalMembersBug00033
             Assert.Fail();
 		}
 	}
+
+    [Test]
+    public void TestBug00033Cpp()
+    {
+        //gd.gdSetErrorMethod(GlobalMembersGdtest.gdSilence);
+        using (var image = new Image())
+        {
+            string path = string.Format("{0}/png/bug00033.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
+            if (image.CreateFromPng(path))
+            {
+                Assert.Fail();
+            }
+        }
+    }
 }
 
