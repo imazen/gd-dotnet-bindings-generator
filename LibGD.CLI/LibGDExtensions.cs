@@ -7,74 +7,81 @@ namespace LibGD
     {
         public static gdImageStruct gdImageCreateFromPng(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromPng);
+            return ReadFromByteArray(bytes, gdImageCreateFromPngPtr);
         }
 
         public static gdImageStruct gdImageCreateFromGif(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromGif);
+            return ReadFromByteArray(bytes, gdImageCreateFromGifPtr);
         }
 
         public static gdImageStruct gdImageCreateFromWBMP(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromWBMP);
+            return ReadFromByteArray(bytes, gdImageCreateFromWBMPPtr);
         }
 
         public static gdImageStruct gdImageCreateFromJpeg(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromJpeg);
+            return ReadFromByteArray(bytes, gdImageCreateFromJpegPtr);
         }
 
-        public static gdImageStruct gdImageCreateFromJpegEx(byte[] bytes, int ignore_warning)
+        public static unsafe gdImageStruct gdImageCreateFromJpegEx(byte[] bytes, int ignore_warning)
         {
-            string temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, bytes);
-            gdImageStruct result = gdImageCreateFromJpegEx(temp, ignore_warning);
-            File.Delete(temp);
-            return result;
+            fixed (byte* data = bytes)
+            {
+                return gdImageCreateFromJpegPtrEx(bytes.Length, new IntPtr(data), ignore_warning);
+            }
         }
 
 #if !NO_TIFF
 
         public static gdImageStruct gdImageCreateFromTiff(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromTiff);
+            return ReadFromByteArray(bytes, gdImageCreateFromTiffPtr);
         }
 
 #endif
 
         public static gdImageStruct gdImageCreateFromTga(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromTga);
+            return ReadFromByteArray(bytes, gdImageCreateFromTgaPtr);
         }
 
         public static gdImageStruct gdImageCreateFromBmp(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromBmp);
+            return ReadFromByteArray(bytes, gdImageCreateFromBmpPtr);
         }
 
         public static gdImageStruct gdImageCreateFromGd(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromGd);
+            return ReadFromByteArray(bytes, gdImageCreateFromGdPtr);
         }
 
         public static gdImageStruct gdImageCreateFromGd2(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromGd2);
+            return ReadFromByteArray(bytes, gdImageCreateFromGd2Ptr);
         }
 
-        public static gdImageStruct gdImageCreateFromGd2Part(byte[] bytes, int srcx, int srcy, int w, int h)
+        public static unsafe gdImageStruct gdImageCreateFromGd2Part(byte[] bytes, int srcx, int srcy, int w, int h)
         {
-            string temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, bytes);
-            gdImageStruct result = gdImageCreateFromGd2Part(temp, srcx, srcy, w, h);
-            File.Delete(temp);
-            return result;
+            fixed (byte* data = bytes)
+            {
+                return gdImageCreateFromGd2PartPtr(bytes.Length, new IntPtr(data), srcx, srcy, w, h);
+            }
         }
 
         public static gdImageStruct gdImageCreateFromXbm(byte[] bytes)
         {
-            return ReadFromByteArray(bytes, gdImageCreateFromXbm);
+            string temp = Path.GetTempFileName();
+            File.WriteAllBytes(temp, bytes);
+            try
+            {
+                return gdImageCreateFromXbm(temp);
+            }
+            finally
+            {
+                File.Delete(temp);
+            }
         }
 
         public static gdImageStruct gdImageCreateFromPng(string file)
@@ -179,18 +186,10 @@ namespace LibGD
 
         public static gdImageStruct gdImageCreateFromJpegEx(Stream stream, int ignore_warning)
         {
-            string temp = Path.GetTempFileName();
-            try
+            using (var output = new MemoryStream())
             {
-                using (var output = File.OpenWrite(temp))
-                {
-                    stream.CopyTo(output);
-                }
-                return gdImageCreateFromJpegEx(temp, ignore_warning);
-            }
-            finally
-            {
-                File.Delete(temp);
+                stream.CopyTo(output);
+                return gdImageCreateFromJpegEx(output.ToArray(), ignore_warning);
             }
         }
 
@@ -225,37 +224,27 @@ namespace LibGD
 
         public static gdImageStruct gdImageCreateFromGd2Part(Stream stream, int srcx, int srcy, int w, int h)
         {
-            string temp = Path.GetTempFileName();
-            try
+            using (var output = new MemoryStream())
             {
-                using (var output = File.OpenWrite(temp))
-                {
-                    stream.CopyTo(output);
-                }
-                return gdImageCreateFromGd2Part(temp, srcx, srcy, w, h);
-            }
-            finally
-            {
-                File.Delete(temp);
+                stream.CopyTo(output);
+                return gdImageCreateFromGd2Part(output.ToArray(), srcx, srcy, w, h);
             }
         }
 
         public static gdImageStruct gdImageCreateFromXbm(Stream stream)
         {
-            return ReadFromStream(stream, gdImageCreateFromXbm);
+            using (var output = new MemoryStream())
+            {
+                stream.CopyTo(output);
+                return gdImageCreateFromXbm(output.ToArray());
+            }
         }
 
-        private static gdImageStruct ReadFromByteArray(byte[] bytes, Func<IntPtr, gdImageStruct> function)
+        private static unsafe gdImageStruct ReadFromByteArray(byte[] bytes, Func<int, IntPtr, gdImageStruct> function)
         {
-            string temp = Path.GetTempFileName();
-            File.WriteAllBytes(temp, bytes);
-            try
+            fixed (byte* data = bytes)
             {
-                return ReadFromFile(temp, function);
-            }
-            finally
-            {
-                File.Delete(temp);
+                return function(bytes.Length, new IntPtr(data));
             }
         }
 
@@ -272,20 +261,12 @@ namespace LibGD
             }
         }
 
-        private static gdImageStruct ReadFromStream(Stream stream, Func<IntPtr, gdImageStruct> function)
+        private static gdImageStruct ReadFromStream(Stream stream, Func<byte[], gdImageStruct> function)
         {
-            string temp = Path.GetTempFileName();
-            try
+            using (var output = new MemoryStream())
             {
-                using (var output = File.OpenWrite(temp))
-                {
-                    stream.CopyTo(output);
-                }
-                return ReadFromFile(temp, gdImageCreateFromPng);
-            }
-            finally
-            {
-                File.Delete(temp);
+                stream.CopyTo(output);
+                return function(output.ToArray());
             }
         }
 
@@ -441,6 +422,56 @@ namespace LibGD
                 return CreateFromFile(@in, CreateFromGif);
             }
 
+            public bool CreateFromGd(byte[] bytes)
+            {
+                return CreateFromBytes(bytes, CreateFromGd);
+            }
+
+            public bool CreateFromGd2(byte[] bytes)
+            {
+                return CreateFromBytes(bytes, CreateFromGd2);
+            }
+
+            public bool CreateFromPng(byte[] bytes)
+            {
+                return CreateFromBytes(bytes, CreateFromPng);
+            }
+
+            public bool CreateFromJpeg(byte[] bytes)
+            {
+                return CreateFromBytes(bytes, CreateFromJpeg);
+            }
+
+            public bool CreateFromGif(byte[] bytes)
+            {
+                return CreateFromBytes(bytes, CreateFromGif);
+            }
+
+            public bool CreateFromGd(Stream stream)
+            {
+                return CreateFromStream(stream, CreateFromGd);
+            }
+
+            public bool CreateFromGd2(Stream stream)
+            {
+                return CreateFromStream(stream, CreateFromGd2);
+            }
+
+            public bool CreateFromPng(Stream stream)
+            {
+                return CreateFromStream(stream, CreateFromPng);
+            }
+
+            public bool CreateFromJpeg(Stream stream)
+            {
+                return CreateFromStream(stream, CreateFromJpeg);
+            }
+
+            public bool CreateFromGif(Stream stream)
+            {
+                return CreateFromStream(stream, CreateFromGif);
+            }
+
             public void Png(string @out)
             {
                 SaveToFile(@out, Png);
@@ -464,16 +495,33 @@ namespace LibGD
                 SaveToFile(@out, Gif);
             }
 
-            private static bool CreateFromFile(string @in, Func<IntPtr, bool> func)
+            private static bool CreateFromFile(string @in, Func<IntPtr, bool> function)
             {
                 var fp = C.fopen(@in ?? string.Empty, "rb");
                 try
                 {
-                    return func(fp);
+                    return function(fp);
                 }
                 finally
                 {
                     Close(fp);
+                }
+            }
+
+            private static bool CreateFromBytes(byte[] bytes, Func<int, IntPtr, bool> function)
+            {
+                fixed (byte* data = bytes)
+                {
+                    return function(bytes.Length, new IntPtr(data));
+                }
+            }
+
+            private static bool CreateFromStream(Stream stream, Func<byte[], bool> function)
+            {
+                using (var output = new MemoryStream())
+                {
+                    stream.CopyTo(output);
+                    return function(output.ToArray());
                 }
             }
 

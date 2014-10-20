@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -452,7 +453,7 @@ public class GlobalMembersBug00005_2
         fixed (void* gitPtr = this.gifdata)
         {
             gdImageStruct im;
-            if ((im = gd.gdImageCreateFromGifPtr(8994, gitPtr)) != null)
+            if ((im = gd.gdImageCreateFromGifPtr(8994, new IntPtr(gitPtr))) != null)
             {
                 gd.gdImageDestroy(im);
             }
@@ -468,7 +469,7 @@ public class GlobalMembersBug00005_2
     {
         fixed (void* gitPtr = this.gifdata)
         {
-            var image = new Image(8994, gitPtr, new Gif_tag());
+            var image = new Image(8994, new IntPtr(gitPtr), new Gif_tag());
             if (!image.good())
             {
                 Assert.Fail();

@@ -26,7 +26,7 @@ public class GlobalMembersPng_null
     {
         using (var image = new Image())
         {
-            if (image.CreateFromPng(null))
+            if (image.CreateFromPng((string) null))
             {
                 Assert.Fail();
             }

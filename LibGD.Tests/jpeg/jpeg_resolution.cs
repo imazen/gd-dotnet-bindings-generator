@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -14,7 +15,7 @@ public class GlobalMembersJpeg_resolution
 		gd.gdImageSetResolution(im, 72, 300);
 		int red = gd.gdImageColorAllocate(im, 0xFF, 0x00, 0x00);
 		gd.gdImageFilledRectangle(im, 0, 0, 99, 99, red);
-		void* data = gd.gdImageJpegPtr(im, &size, 10);
+		IntPtr data = gd.gdImageJpegPtr(im, &size, 10);
 		gd.gdImageDestroy(im);
 
 		im = gd.gdImageCreateFromJpegPtr(size, data);
@@ -39,7 +40,7 @@ public class GlobalMembersJpeg_resolution
             image.SetResolution(72, 300);
             int red = image.ColorAllocate(0xFF, 0x00, 0x00);
             image.FilledRectangle(0, 0, 99, 99, red);
-            void* data = image.Jpeg(&size, 10);
+            IntPtr data = image.Jpeg(&size, 10);
 
             image.CreateFromJpeg(size, data);
             gd.gdFree(data);

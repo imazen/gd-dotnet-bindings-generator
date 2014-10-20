@@ -22,7 +22,7 @@ public class GlobalMembersGif_null
     {
         using (var image = new Image())
         {
-            image.CreateFromGif(null);
+            image.CreateFromGif((string) null);
             if (image.good())
             {
                 Assert.Fail();

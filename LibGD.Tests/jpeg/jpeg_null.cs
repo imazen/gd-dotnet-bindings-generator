@@ -21,7 +21,7 @@ public class GlobalMembersJpeg_null
     public void TestJpeg_nullCpp()
     {
         var image = new Image();
-        image.CreateFromJpeg(null);
+        image.CreateFromJpeg((string) null);
         if (image.good())
         {
             Assert.Fail();

@@ -24,7 +24,7 @@ public class GlobalMembersGd_null
     {
         using (var image = new Image())
         {
-            if (image.CreateFromGd(null))
+            if (image.CreateFromGd((string) null))
             {
                 Assert.Fail();
             }

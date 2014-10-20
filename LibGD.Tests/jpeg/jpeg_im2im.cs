@@ -26,8 +26,8 @@ public class GlobalMembersJpeg_im2im
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
         gd.gdImageJpeg(src, "jpeg_im2im_src.jpeg", 1);
-        void* p = gd.gdImageJpegPtr(src, &size, 100);
-		if (p == null)
+        IntPtr p = gd.gdImageJpegPtr(src, &size, 100);
+		if (p == IntPtr.Zero)
 		{
 		    gd.gdImageDestroy(src);
             Assert.Fail("p is null\n");
@@ -67,7 +67,7 @@ public class GlobalMembersJpeg_im2im
 	//	CuTestImageResult result = {0, 0};
 #endif
 
-        void* p;
+        IntPtr p;
         using (var src = new Image(100, 100, true))
         {
             if (!src.good())
@@ -82,7 +82,7 @@ public class GlobalMembersJpeg_im2im
             src.Ellipse(70, 25, 30, 20, b);
             src.Jpeg("jpeg_im2im_src.jpeg", 1);
             p = src.Jpeg(&size, 100);
-            if (p == null)
+            if (p == IntPtr.Zero)
             {
                 Assert.Fail("p is null\n");
             }
