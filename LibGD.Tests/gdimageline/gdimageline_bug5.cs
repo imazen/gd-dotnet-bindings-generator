@@ -74,8 +74,7 @@ public class GlobalMembersGdimageline_bug5
             image.Fill(1, 1, white);
 
             /* Make a reference copy. */
-            // this function is not exposed in the C++ wrapper
-            using (var @ref = new Image(gd.gdImageClone(image.GetPtr())))
+            using (var @ref = image.Clone())
             {
                 image.SetAntiAliased(black);
 

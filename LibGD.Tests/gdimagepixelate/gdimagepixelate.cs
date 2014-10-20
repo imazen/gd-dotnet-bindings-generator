@@ -83,21 +83,20 @@ public class GlobalMembersGdimagepixelate
 
     private static int testPixelateCpp(Image image)
     {
-        // this function is not exposed in the C++ wrapper
-        if (gd.gdImagePixelate(image.GetPtr(), -1, (uint) gdPixelateMode.GD_PIXELATE_UPPERLEFT) != 0)
+        if (image.Pixelate(-1, gdPixelateMode.GD_PIXELATE_UPPERLEFT))
             return 0;
-        if (gd.gdImagePixelate(image.GetPtr(), 1, (uint) gdPixelateMode.GD_PIXELATE_UPPERLEFT) != 1)
+        if (!image.Pixelate(1, gdPixelateMode.GD_PIXELATE_UPPERLEFT))
             return 0;
-        if (gd.gdImagePixelate(image.GetPtr(), 2, uint.MaxValue) != 0)
+        if (image.Pixelate(2, (gdPixelateMode) int.MaxValue))
             return 0;
 
         SetupPixelsCpp(image);
-        if (gd.gdImagePixelate(image.GetPtr(), BLOCK_SIZE, (uint) gdPixelateMode.GD_PIXELATE_UPPERLEFT) == 0)
+        if (!image.Pixelate(BLOCK_SIZE, (uint) gdPixelateMode.GD_PIXELATE_UPPERLEFT))
             return 0;
         CheckPixelsCpp(image, expected_upperleft);
 
         SetupPixelsCpp(image);
-        if (gd.gdImagePixelate(image.GetPtr(), BLOCK_SIZE, (uint) gdPixelateMode.GD_PIXELATE_AVERAGE) == 0)
+        if (!image.Pixelate(BLOCK_SIZE, gdPixelateMode.GD_PIXELATE_AVERAGE))
             return 0;
 
         CheckPixelsCpp(image, expected_average);

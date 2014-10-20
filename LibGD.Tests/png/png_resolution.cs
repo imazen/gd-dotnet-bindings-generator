@@ -39,8 +39,7 @@ public class GlobalMembersPng_resolution
         void* data;
         using (var image = new Image(100, 100))
         {
-            // this function is not exposed in the C++ wrapper
-            gd.gdImageSetResolution(image.GetPtr(), 72, 300);
+            image.SetResolution(72, 300);
             int red = image.ColorAllocate(0xFF, 0x00, 0x00);
             image.FilledRectangle(0, 0, 99, 99, red);
             data = image.Png(&size);
@@ -51,11 +50,10 @@ public class GlobalMembersPng_resolution
             image.CreateFromPng(size, data);
             gd.gdFree(data);
 
-            // res_x and res_y are not exposed in the C++ wrapper
-            if (GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.GetPtr().res_x == 72 ? 1 : 0) == 0 ||
-                GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.GetPtr().res_y == 300 ? 1 : 0) == 0)
+            if (GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.ResX() == 72 ? 1 : 0) == 0 ||
+                GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.ResY() == 300 ? 1 : 0) == 0)
             {
-                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "failed image resolution X (%d != 72) or Y (%d != 300)\n", image.GetPtr().res_x, image.GetPtr().res_y);
+                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "failed image resolution X (%d != 72) or Y (%d != 300)\n", image.ResX(), image.ResY());
                 Assert.Fail();
             }
         }

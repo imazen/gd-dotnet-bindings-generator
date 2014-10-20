@@ -69,40 +69,41 @@ public class GlobalMembersBug00067
         int error = 0;
 
         string path = string.Format("{0}/{1}", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_im);
-        var image = new Image();
-        image.CreateFromJpeg(path);
-
-        if (!image.good())
+        using (var image = new Image())
         {
-            GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "loading %s failed.", path);
-            Assert.Fail();
-        }
+            image.CreateFromJpeg(path);
 
-        int color = image.ColorAllocate(0, 0, 0);
-
-        if (color < 0)
-        {
-            GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "allocation color from image failed.");
-            Assert.Fail();
-        }
-
-        for (int angle = 0; angle <= 180; angle += 15)
-        {
-            // this function is not exposed in the C++ wrapper
-            var exp = new Image(gd.gdImageRotateInterpolated(image.GetPtr(), angle, color));
-
-            if (!exp.good())
+            if (!image.good())
             {
-                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "rotating image failed for %03d.", angle);
+                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "loading %s failed.", path);
                 Assert.Fail();
             }
 
-            path = string.Format("{0}/{1}_{2:D3}_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_exp, angle);
+            int color = image.ColorAllocate(0, 0, 0);
 
-            if (GlobalMembersGdtest.TestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, path, exp) == 0)
+            if (color < 0)
             {
-                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "comparing rotated image to %s failed.", path);
-                error += 1;
+                GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "allocation color from image failed.");
+                Assert.Fail();
+            }
+
+            for (int angle = 0; angle <= 180; angle += 15)
+            {
+                var exp = image.RotateInterpolated(angle, color);
+
+                if (!exp.good())
+                {
+                    GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "rotating image failed for %03d.", angle);
+                    Assert.Fail();
+                }
+
+                path = string.Format("{0}/{1}_{2:D3}_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR, file_exp, angle);
+
+                if (GlobalMembersGdtest.TestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, path, exp) == 0)
+                {
+                    GlobalMembersGdtest.gdTestErrorMsg(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "comparing rotated image to %s failed.", path);
+                    error += 1;
+                }
             }
         }
 

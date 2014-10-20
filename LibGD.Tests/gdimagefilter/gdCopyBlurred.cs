@@ -82,8 +82,7 @@ public class GlobalMembersGdCopyBlurred
 
         GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.good() ? 1 : 0);
 
-        // this function is not exposed in the C++ wrapper
-        gd.gdImageSetInterpolationMethod(image.GetPtr(), gdInterpolationMethod.GD_BICUBIC); // FP interp'n
+        image.SetInterpolationMethod(gdInterpolationMethod.GD_BICUBIC); // FP interp'n
 
         return image;
     } // mkwhite
@@ -149,8 +148,7 @@ public class GlobalMembersGdCopyBlurred
 
     private static void blurblankCpp(Image image, int radius, double sigma)
     {
-        // this function is not exposed in the C++ wrapper
-        using (var result = new Image(gd.gdImageCopyGaussianBlurred(image.GetPtr(), radius, sigma)))
+        using (var result = image.CopyGaussianBlurred(radius, sigma))
         {
             GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", result.good() ? 1 : 0);
             if (!result.good())
@@ -326,8 +324,7 @@ public class GlobalMembersGdCopyBlurred
 
             saveCpp(image, "cross.png");
 
-            // this function is not exposed in the C++ wrapper
-            using (var blurred = new Image(gd.gdImageCopyGaussianBlurred(image.GetPtr(), RADIUS, 0.0)))
+            using (var blurred = image.CopyGaussianBlurred(RADIUS, 0.0))
             {
                 saveCpp(blurred, "blurredcross.png");
 

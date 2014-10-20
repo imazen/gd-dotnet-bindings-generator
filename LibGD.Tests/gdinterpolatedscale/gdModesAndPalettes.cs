@@ -62,8 +62,7 @@ public class GlobalMembersGdModesAndPalettes
 
                 images[i].FilledRectangle(0, 0, X - 1, Y - 1, images[i].ColorExact(255, 255, 255, 0));
 
-                // this function is not exposed in the C++ wrapper
-                gd.gdImageSetInterpolationMethod(images[i].GetPtr(), method);
+                images[i].SetInterpolationMethod(method);
                 GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", images[i].GetPtr().interpolation_id == method ? 1 : 0);
 
                 using (var result = new Image(gd.gdImageScale(images[i].GetPtr(), NX, NY)))

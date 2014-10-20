@@ -71,8 +71,7 @@ public class GlobalMembersPhp_bug_64898
             /*	Try default interpolation method, but any non-optimized fails */
             /*	gd.gdImageSetInterpolationMethod(im, GD_BICUBIC_FIXED); */
 
-            // this function is not exposed in the C++ wrapper
-            using (var exp = new Image(gd.gdImageRotateInterpolated(image.GetPtr(), 45, 0x0)))
+            using (var exp = image.RotateInterpolated(45, 0x0))
             {
                 if (!exp.good())
                 {

@@ -43,8 +43,7 @@ public class GlobalMembersGdTrivialResize
 
         GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", image.good() ? 1 : 0);
 
-        // this function is not exposed in the C++ wrapper
-        gd.gdImageSetInterpolationMethod(image.GetPtr(), gdInterpolationMethod.GD_BICUBIC); // FP interp'n
+        image.SetInterpolationMethod(gdInterpolationMethod.GD_BICUBIC); // FP interp'n
 
         return image;
     } // mkwhite
@@ -141,8 +140,7 @@ public class GlobalMembersGdTrivialResize
         {
             using (Image imageref = mkwhiteCpp(x, y))
             {
-                // this function is not exposed in the C++ wrapper
-                using (var same = new Image(gd.gdImageScale(image.GetPtr(), (uint) x, (uint) y)))
+                using (var same = image.Scale(x, y))
                 {
                     GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", (image.GetPtr().__Instance != same.GetPtr().__Instance) ? 1 : 0);
                     GlobalMembersGdtest.gdTestAssert(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, "assert failed in <%s:%i>\n", (GlobalMembersGdtest.gdMaxPixelDiff(image, same) == 0) ? 1 : 0);
