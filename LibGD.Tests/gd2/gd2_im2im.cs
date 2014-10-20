@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -26,8 +27,8 @@ public class GlobalMembersGd2_im2im
         const int cs = (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN +
                         GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX) / 2;
         gd.gdImageGd2(src, string.Format("gd2_im2im_{0}.gd2", "src"), cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);
-        void* p = gd.gdImageGd2Ptr(src, cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED, &size);
-		if (p == null)
+        IntPtr p = gd.gdImageGd2Ptr(src, cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED, &size);
+		if (p == IntPtr.Zero)
 		{
             gd.gdImageDestroy(src);
             Assert.Fail("p is null\n");
@@ -66,7 +67,6 @@ public class GlobalMembersGd2_im2im
         int size = 0;
         var result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
 
-        void* p;
         using (var src = new Image(100, 100))
         {
             if (!src.good())
@@ -83,8 +83,8 @@ public class GlobalMembersGd2_im2im
             const int cs = (GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MIN +
                             GlobalMembersGdtest.DefineConstants.GD2_CHUNKSIZE_MAX) / 2;
             src.Gd2("gd2_im2im_src.gd2", cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);
-            p = src.Gd2(cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED, &size);
-            if (p == null)
+            IntPtr p = src.Gd2(cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED, &size);
+            if (p == IntPtr.Zero)
             {
                 Assert.Fail("p is null");
             }
@@ -102,14 +102,15 @@ public class GlobalMembersGd2_im2im
                 }
                 dst.Gd2("gd2_im2im_dst.gd2", cs, GlobalMembersGdtest.DefineConstants.GD2_FMT_COMPRESSED);
                 GlobalMembersGdtest.TestImageDiff(src, dst, null, result);
+
+                if (result.pixels_changed > 0)
+                {
+                    gd.gdFree(p);
+                    Assert.Fail("pixels changed: {0:D}", result.pixels_changed);
+                }
+                gd.gdFree(p);
             }
         }
-        if (result.pixels_changed > 0)
-        {
-            gd.gdFree(p);
-            Assert.Fail("pixels changed: {0:D}", result.pixels_changed);
-        }
-        gd.gdFree(p);
     }
 }
 

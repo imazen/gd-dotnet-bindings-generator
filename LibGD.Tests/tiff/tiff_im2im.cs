@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -9,32 +10,26 @@ public class GlobalMembersTiff_im2im
     [Test]
 	public unsafe void TestTiff_im2im()
 	{
-		gdImageStruct src;
-		gdImageStruct dst;
-		int r;
-		int g;
-		int b;
-		void* p;
-		int size = 0;
+        int size = 0;
 #if false
 	//	CuTestImageResult result = {0, 0};
 	#endif
 
-		src = gd.gdImageCreate(100, 100);
+		gdImageStruct src = gd.gdImageCreate(100, 100);
 		if (src == null)
 		{
 			Assert.Fail("could not create src\n");
 		}
-		r = gd.gdImageColorAllocate(src, 0xFF, 0, 0);
-		g = gd.gdImageColorAllocate(src, 0, 0xFF, 0);
-		b = gd.gdImageColorAllocate(src, 0, 0, 0xFF);
+		int r = gd.gdImageColorAllocate(src, 0xFF, 0, 0);
+		int g = gd.gdImageColorAllocate(src, 0, 0xFF, 0);
+		int b = gd.gdImageColorAllocate(src, 0, 0, 0xFF);
 		gd.gdImageFilledRectangle(src, 0, 0, 99, 99, r);
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
 
 		gd.gdImageTiff(src, "tiff_im2im_src.tiff");
-		p = gd.gdImageTiffPtr(src, &size);
-		if (p == null)
+		IntPtr p = gd.gdImageTiffPtr(src, &size);
+		if (p == IntPtr.Zero)
 		{
             gd.gdImageDestroy(src);
             Assert.Fail("p is null\n");
@@ -46,7 +41,7 @@ public class GlobalMembersTiff_im2im
 			Assert.Fail("size is non-positive\n");
 		}
 
-		dst = gd.gdImageCreateFromTiffPtr(size, p);
+		gdImageStruct dst = gd.gdImageCreateFromTiffPtr(size, p);
 		if (dst == null)
 		{
 		    gd.gdFree(p);

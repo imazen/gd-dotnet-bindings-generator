@@ -1,4 +1,4 @@
-using System.Net;
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -9,30 +9,24 @@ public class GlobalMembersGd_im2im
     [Test]
     public unsafe void TestGd_im2im()
 	{
-		gdImageStruct src;
-		gdImageStruct dst;
-		int r;
-		int g;
-		int b;
-		void* p;
-		int size = 0;
-        GlobalMembersGdtest.CuTestImageResult result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
+        int size = 0;
+        var result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
 
-		src = gd.gdImageCreate(100, 100);
+		gdImageStruct src = gd.gdImageCreate(100, 100);
 		if (src == null)
 		{
             Assert.Fail("could not create src");
 		}
-		r = gd.gdImageColorAllocate(src, 0xFF, 0, 0);
-		g = gd.gdImageColorAllocate(src, 0, 0xFF, 0);
-		b = gd.gdImageColorAllocate(src, 0, 0, 0xFF);
+		int r = gd.gdImageColorAllocate(src, 0xFF, 0, 0);
+		int g = gd.gdImageColorAllocate(src, 0, 0xFF, 0);
+		int b = gd.gdImageColorAllocate(src, 0, 0, 0xFF);
 		gd.gdImageFilledRectangle(src, 0, 0, 99, 99, r);
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
 
         gd.gdImageGd(src, "gd_im2im_src.gd");
-        p = gd.gdImageGdPtr(src, &size);
-		if (p == null)
+        IntPtr p = gd.gdImageGdPtr(src, &size);
+		if (p == IntPtr.Zero)
 		{
             gd.gdImageDestroy(src);
             Assert.Fail("p is null");
@@ -44,7 +38,7 @@ public class GlobalMembersGd_im2im
 			Assert.Fail("size is non-positive");
 		}
 
-		dst = gd.gdImageCreateFromGdPtr(size, p);
+		gdImageStruct dst = gd.gdImageCreateFromGdPtr(size, p);
 		if (dst == null)
 		{
             gd.gdFree(p);
@@ -84,8 +78,8 @@ public class GlobalMembersGd_im2im
             src.Gd("gd_im2im_src.gd");
 
             int size = 0;
-            void* p = src.Gd(&size);
-            if (p == null)
+            IntPtr p = src.Gd(&size);
+            if (p == IntPtr.Zero)
             {
                 Assert.Fail("p is null");
             }

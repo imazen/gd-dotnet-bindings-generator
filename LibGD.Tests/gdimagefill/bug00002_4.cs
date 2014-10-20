@@ -31,7 +31,7 @@ public class GlobalMembersBug00002_4
 		gd.gdImageFill(im, 100,21, white);
 
 		string path = string.Format("{0}/gdimagefill/bug00002_4_exp.png", GlobalMembersGdtest.DefineConstants.GDTEST_TOP_DIR);
-		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, (path), (im)) == 0)
+		if (GlobalMembersGdtest.gdTestImageCompareToFile(GlobalMembersGdtest.__FILE__, GlobalMembersGdtest.__LINE__, null, path, im) == 0)
 		{
 			error = 1;
 		}

@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -13,7 +14,7 @@ public class GlobalMembersBug00086
         fixed (void* pngPtr = this.pngdata)
         {
             gdImageStruct im;
-            if ((im = gd.gdImageCreateFromPngPtr(93, pngPtr)) != null)
+            if ((im = gd.gdImageCreateFromPngPtr(93, new IntPtr(pngPtr))) != null)
             {
                 gd.gdImageDestroy(im);
                 Assert.Fail();
@@ -30,7 +31,7 @@ public class GlobalMembersBug00086
         {
             using (var image = new Image())
             {
-                if (image.CreateFromPng(93, pngPtr))
+                if (image.CreateFromPng(93, new IntPtr(pngPtr)))
                 {
                     Assert.Fail();
                 }

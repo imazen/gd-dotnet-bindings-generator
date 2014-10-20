@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using NUnit.Framework;
 
@@ -23,8 +24,8 @@ public class GlobalMembersBmp_im2im
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
 
         gd.gdImageBmp(src, "bmp_im2im_src.bmp", 1);
-        void* p = gd.gdImageBmpPtr(src, &size, 1);
-		if (p == null)
+        IntPtr p = gd.gdImageBmpPtr(src, &size, 1);
+		if (p == IntPtr.Zero)
 		{
             gd.gdImageDestroy(src);
 			Assert.Fail("p is null\n");

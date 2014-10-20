@@ -1,3 +1,4 @@
+using System;
 using LibGD;
 using LibGD.GD;
 using NUnit.Framework;
@@ -23,8 +24,8 @@ public class GlobalMembersPng_im2im
 		gd.gdImageRectangle(src, 20, 20, 79, 79, g);
 		gd.gdImageEllipse(src, 70, 25, 30, 20, b);
         gd.gdImagePng(src, "png_im2im_src.png");
-	    void* p = gd.gdImagePngPtr(src, &size);
-		if (p == null)
+	    IntPtr p = gd.gdImagePngPtr(src, &size);
+		if (p == IntPtr.Zero)
 		{
             gd.gdImageDestroy(src);
             Assert.Fail("p is null\n");
@@ -63,7 +64,7 @@ public class GlobalMembersPng_im2im
         int size = 0;
         var result = new GlobalMembersGdtest.CuTestImageResult(0, 0);
 
-        void* p;
+        IntPtr p;
         using (var src = new Image(100, 100))
         {
             if (!src.good())
@@ -78,7 +79,7 @@ public class GlobalMembersPng_im2im
             src.Ellipse(70, 25, 30, 20, b);
             src.Png("png_im2im_src.png");
             p = src.Png(&size);
-            if (p == null)
+            if (p == IntPtr.Zero)
             {
                 Assert.Fail("p is null");
             }
