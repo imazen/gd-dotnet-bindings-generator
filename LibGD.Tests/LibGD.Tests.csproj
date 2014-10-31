@@ -52,8 +52,8 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="LibGDSharp">
-      <HintPath>..\LibGD.CLI\bin\Debug\LibGDSharp.dll</HintPath>
+    <Reference Include="libgd">
+      <HintPath>.\libgd.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\References\nunit.framework.dll</HintPath>

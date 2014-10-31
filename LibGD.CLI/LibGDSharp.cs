@@ -39,6 +39,22 @@ namespace LibGD.CLI
             ctx.SetClassAsValueType("Gd_tag");
             ctx.SetClassAsValueType("Gd2_tag");
             ctx.SetClassAsValueType("Xbm_tag");
+
+            ctx.IgnoreClassField("gdIOCtx", "getC");
+            ctx.IgnoreClassField("gdIOCtx", "getBuf");
+            ctx.IgnoreClassField("gdIOCtx", "putC");
+            ctx.IgnoreClassField("gdIOCtx", "putBuf");
+            ctx.IgnoreClassField("gdIOCtx", "seek");
+            ctx.IgnoreClassField("gdIOCtx", "tell");
+            ctx.IgnoreClassField("gdIOCtx", "gd_free");
+            ctx.IgnoreClassField("gdSource", "source");
+            ctx.IgnoreClassField("gdSink", "sink");
+
+            ctx.IgnoreFunctionWithName("putmbi");
+            ctx.IgnoreFunctionWithName("getmbi");
+            ctx.IgnoreFunctionWithName("skipheader");
+            ctx.IgnoreFunctionWithName("readwbmp");
+            ctx.IgnoreFunctionWithName("writewbmp");
         }
 
         public void Postprocess(Driver driver, ASTContext lib)
@@ -60,7 +76,9 @@ namespace LibGD.CLI
                     driver.Options.TargetTriple = nativeLibrary.ArchType == ArchType.x86 ? "i386-pc-windows" : "amd64-pc-windows";
                 }
                 driver.Options.addDefines("_XKEYCHECK_H");
+                driver.Options.GeneratorKind = GeneratorKind.CLI;
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf_VC++2013.cs"));
+                driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h").Where(p => Path.GetFileNameWithoutExtension(p) != "webpimg"));
             }
             else
             {
@@ -78,6 +96,8 @@ namespace LibGD.CLI
                 driver.Options.MicrosoftMode = false;
                 driver.Options.TargetTriple = target;
                 driver.Options.Abi = CppAbi.Itanium;
+                driver.Options.MarshalCharAsManagedChar = true;
+                driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h"));
 
                 string gccPath = Path.GetDirectoryName(Path.GetDirectoryName(this.make));
                 driver.Options.addSystemIncludeDirs(Path.Combine(gccPath, "include", "c++", compilerVersion));
@@ -89,7 +109,6 @@ namespace LibGD.CLI
                 driver.Options.CodeFiles.Add(Path.Combine(dir, "_iobuf.cs"));
             }
             driver.Options.addDefines("HAVE_CONFIG_H");
-            driver.Options.GeneratorKind = GeneratorKind.CSharp;
             driver.Options.LibraryName = "LibGDSharp";
             driver.Options.OutputNamespace = "LibGD";
             driver.Options.Verbose = true;
@@ -97,10 +116,8 @@ namespace LibGD.CLI
             driver.Options.CompileCode = true;
             driver.Options.CheckSymbols = true;
             driver.Options.GenerateDefaultValuesForArguments = true;
-            driver.Options.MarshalCharAsManagedChar = true;
             driver.Options.StripLibPrefix = false;
             driver.Options.GenerateSingleCSharpFile = true;
-            driver.Options.Headers.AddRange(Directory.EnumerateFiles(this.includeDir, "*.h"));
             driver.Options.addIncludeDirs(includeDir);
             driver.Options.addLibraryDirs(Path.GetDirectoryName(this.libraryFile));
             driver.Options.Libraries.Add(Path.GetFileName(this.libraryFile));

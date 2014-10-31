@@ -60,7 +60,7 @@ public class GlobalMembersGdimagecolorreplace
 		int g;
 		int b;
 
-        var im = new gdImageStruct(imPtr, null);
+        var im = gdImageStruct.__CreateInstance(imPtr);
 		r = ((im).trueColor != 0 ? (((src) & 0xFF0000) >> 16) : (im).red[(src)]);
 		g = ((im).trueColor != 0 ? (((src) & 0x00FF00) >> 8) : (im).green[(src)]);
 		b = ((im).trueColor != 0 ? ((src) & 0x0000FF) : (im).blue[(src)]);
@@ -73,7 +73,7 @@ public class GlobalMembersGdimagecolorreplace
 
     private static unsafe int callbackCpp(IntPtr imPtr, int src)
     {
-        var image = new Image(new gdImageStruct(imPtr, null));
+        var image = new Image(gdImageStruct.__CreateInstance(imPtr));
         int r = image.IsTrueColor() ? (src & 0xFF0000) >> 16 : image.Red(src);
         int g = image.IsTrueColor() ? (src & 0x00FF00) >> 8 : image.Green(src);
         int b = image.IsTrueColor() ? (src & 0x0000FF) : image.Blue(src);
